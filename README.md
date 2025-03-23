@@ -1,4 +1,4 @@
-# Kenkyu - Free Deep Research on Local
+# Noviq - Free Deep Research on Local
 
 ## High level overview steps
 
@@ -15,7 +15,6 @@
 7. Research individual links, gather all the relevant information from the link, summarize and store it SOMEWHERE(Graph DB, Vector DB?)
 8. Provide and detailed final response gathering all the information so far.
     a. How to collate everything nicely (Big problem alone to be solved)
-9. 
 
 
 ## Performance Results
