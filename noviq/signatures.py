@@ -31,3 +31,9 @@ class GenerateWebSearchQueries(dspy.Signature):
     research_plan_step: str = dspy.InputField(description="A research plan step for which we need to generate web search queries to help the user get the best answer.")
     web_search_queries: list[str] = dspy.OutputField(description="A list of web search queries to help the user get the best answer for this current step.")
 
+
+class CleanWebpageText(dspy.Signature):
+    """Clean the webpage text to help the user get the best answer."""
+
+    webpage_text: str = dspy.InputField(description="The webpage text to clean.")
+    cleaned_webpage_text: str = dspy.OutputField(description="The cleaned webpage text to help the user get the best answer.")
