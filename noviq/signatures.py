@@ -66,3 +66,13 @@ class CleanAndClassifyWebpageText(dspy.Signature):
     category: str = dspy.OutputField(
         description="""A single specific category that best describes the content."""
     )
+
+
+class GenerateFinalResearchReport(dspy.Signature):
+    """Generate a final research report based on the user's intent and the cleaned webpage text.
+    The research report should be well detailed and include all the steps needed to get the best answer."""
+
+    user_intent: str = dspy.InputField(description="The user's intent for the query.")
+    qa_pairs: list[tuple[str, str]] = dspy.InputField(description="A list of qa pairs.")
+    cleaned_webpage_text: list[str] = dspy.InputField(description="A list of cleaned webpage text for reference.")
+    research_report: str = dspy.OutputField(description="A final research report formatted in markdown. Explain in super detail by taking all the qa pairs and the cleaned webpage text into account.")

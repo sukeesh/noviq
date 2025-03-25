@@ -3,7 +3,8 @@ from noviq.signatures import (
     GenerateClarifyingQuestions, 
     PrepareForResearch, 
     GenerateWebSearchQueries, 
-    CleanAndClassifyWebpageText
+    CleanAndClassifyWebpageText,
+    GenerateFinalResearchReport
 )
 import ollama
 import inquirer
@@ -36,6 +37,7 @@ clarifying_question = dspy.ChainOfThought(GenerateClarifyingQuestions)
 research_plan = dspy.ChainOfThought(PrepareForResearch)
 generate_web_search_queries = dspy.ChainOfThought(GenerateWebSearchQueries)
 clean_webpage_text = dspy.ChainOfThought(CleanAndClassifyWebpageText)
+generate_final_research_report = dspy.ChainOfThought(GenerateFinalResearchReport)
 
 questions = clarifying_question(user_intent=user_intent)
 
@@ -111,25 +113,39 @@ def get_webpage_text(url: str) -> str:
         return ""
 
 print("Research Plan:")
-for step in plan.research_plan:
+for step in plan.research_plan[:2]:  # Limit to first 2 steps
+    print(f"\nExecuting step: {step}")
     web_search_queries = generate_web_search_queries(user_intent=user_intent, qa_pairs=qa_pairs, overall_research_plan=plan.research_plan, research_plan_step=step)
-    queries = web_search_queries.web_search_queries
-    print(step, queries)
+    queries = web_search_queries.web_search_queries[:1]  # Take only first query
+
+    scraped_webpage_texts = []
 
     for query in queries:
         results = get_search_queries(query)
         print(f"\nResults for query: {query}")
-        for text, url in results:
-            print(f"Title: {text}, URL: {url}\n")
+        # Take only first result
+        if results:
+            text, url = results[0]
+            print(f"Title: {text}\nURL: {url}\n")
             content = get_webpage_text(url)
-            print("Content: ", content)
+            print("Content length: ", len(content))  # Print length instead of full content
 
             cleaned_content = clean_webpage_text(user_intent=user_intent, webpage_text=content)
-            print("Cleaned Content: ", cleaned_content)
+
             category = cleaned_content.category
             cleaned_text = cleaned_content.cleaned_webpage_text
+            scraped_webpage_texts.append(cleaned_text)
 
             print("Category: ", category)
             print("Cleaned Text: ", cleaned_text)
-            exit(0)
-        exit(0)
+
+research_report = generate_final_research_report(user_intent=user_intent, qa_pairs=qa_pairs, cleaned_webpage_text=scraped_webpage_texts)
+
+research_report_text = research_report.research_report
+
+file_name = "report.md"
+with open(file_name, "w") as f:
+    import markdown
+    f.write(markdown.markdown(research_report_text)) 
+
+print(f"Research report saved to {file_name}")
