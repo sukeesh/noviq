@@ -17,7 +17,7 @@ class PrepareForResearch(dspy.Signature):
 
     user_intent: str = dspy.InputField(description="The user's intent for the query.")
     qa_pairs: list[tuple[str, str]] = dspy.InputField(description="A list of qa pairs.")
-    research_plan: list[str] = dspy.OutputField(description="A research plan to help the user get the best answer.") #TODO: Should this be a list?
+    research_plan: list[str] = dspy.OutputField(description="A research plan to help the user get the best answer.")
 
 
 
@@ -32,8 +32,12 @@ class GenerateWebSearchQueries(dspy.Signature):
     web_search_queries: list[str] = dspy.OutputField(description="A list of web search queries to help the user get the best answer for this current step.")
 
 
-class CleanWebpageText(dspy.Signature):
-    """Clean the webpage text to help the user get the best answer."""
+class CleanAndClassifyWebpageText(dspy.Signature):
+    """Clean the webpage text and classify it into a category to help the user get the best answer.
+    Do not remove any information from the webpage text. Your job is to only clean the text and classify it into a category.
+    Basically, the user is trying to research for a particular topic and the text provided is raw webpage content"""
 
-    webpage_text: str = dspy.InputField(description="The webpage text to clean.")
-    cleaned_webpage_text: str = dspy.OutputField(description="The cleaned webpage text to help the user get the best answer.")
+    user_intent: str = dspy.InputField(description="The user's intent for the query.")
+    webpage_text: str = dspy.InputField(description="The webpage text to clean. This text has been scraped from the web and is raw content. Some of the text might be irrelevant to the user's intent. Your job is to clean the text and classify it into a category.")
+    cleaned_webpage_text: str = dspy.OutputField(description="The clean webpage content in markdown format. Return all of the sections of the webpage in markdown format. Do not remove any information from the webpage text. Your job is to only clean the text for irrelevant topics.")
+    category: str = dspy.OutputField(description="The category of the webpage text to help the user get the best answer.")

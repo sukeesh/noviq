@@ -1,5 +1,11 @@
 import dspy
-from noviq.signatures import GenerateClarifyingQuestions, PrepareForResearch, GenerateWebSearchQueries, CleanWebpageText
+from noviq.signatures import (
+    GenerateClarifyingQuestions, 
+    PrepareForResearch, 
+    GenerateWebSearchQueries, 
+    CleanAndClassifyWebpageText
+)
+
 
 user_intent = input("Enter your research intent: ")
 
@@ -9,7 +15,7 @@ dspy.configure(lm=lm)
 clarifying_question = dspy.ChainOfThought(GenerateClarifyingQuestions)
 research_plan = dspy.ChainOfThought(PrepareForResearch)
 generate_web_search_queries = dspy.ChainOfThought(GenerateWebSearchQueries)
-clean_webpage_text = dspy.ChainOfThought(CleanWebpageText)
+clean_webpage_text = dspy.ChainOfThought(CleanAndClassifyWebpageText)
 
 
 questions = clarifying_question(user_intent=user_intent)
@@ -99,10 +105,16 @@ for step in plan.research_plan:
         results = get_search_queries(query)
         print(f"\nResults for query: {query}")
         for text, url in results:
-            print(f"Title: {text}")
-            print(f"URL: {url}\n")
+            print(f"Title: {text}, URL: {url}\n")
             content = get_webpage_text(url)
-            cleaned_content = clean_webpage_text(webpage_text=content)
-            print(cleaned_content)
+            print("Content: ", content)
+
+            cleaned_content = clean_webpage_text(user_intent=user_intent, webpage_text=content)
+            print("Cleaned Content: ", cleaned_content)
+            category = cleaned_content.category
+            cleaned_text = cleaned_content.cleaned_webpage_text
+
+            print("Category: ", category)
+            print("Cleaned Text: ", cleaned_text)
             exit(0)
         exit(0)
