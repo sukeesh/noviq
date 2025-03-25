@@ -33,11 +33,36 @@ class GenerateWebSearchQueries(dspy.Signature):
 
 
 class CleanAndClassifyWebpageText(dspy.Signature):
-    """Clean the webpage text and classify it into a category to help the user get the best answer.
-    Do not remove any information from the webpage text. Your job is to only clean the text and classify it into a category.
-    Basically, the user is trying to research for a particular topic and the text provided is raw webpage content"""
+    """Extract and structure the relevant content from raw webpage text.
+    
+    Rules:
+    1. Remove all navigation elements, ads, and website chrome
+    2. Remove all notification prompts and website settings
+    3. Keep only the main article/content
+    4. Format the content in clean markdown with proper headers and sections
+    5. Preserve all factual information from the main content
+    6. Do not add any commentary or analysis
+    """
 
-    user_intent: str = dspy.InputField(description="The user's intent for the query.")
-    webpage_text: str = dspy.InputField(description="The webpage text to clean. This text has been scraped from the web and is raw content. Some of the text might be irrelevant to the user's intent. Your job is to clean the text and classify it into a category.")
-    cleaned_webpage_text: str = dspy.OutputField(description="The clean webpage content in markdown format. Return all of the sections of the webpage in markdown format. Do not remove any information from the webpage text. Your job is to only clean the text for irrelevant topics.")
-    category: str = dspy.OutputField(description="The category of the webpage text to help the user get the best answer.")
+    user_intent: str = dspy.InputField(
+        description="The user's research intent to help focus the content extraction."
+    )
+    
+    webpage_text: str = dspy.InputField(
+        description="Raw webpage text that needs cleaning. Contains the main content mixed with navigation, ads, and website elements."
+    )
+    
+    cleaned_webpage_text: str = dspy.OutputField(
+        description="""The extracted main content in markdown format. Must:
+        - Remove all navigation, ads, footers, notification prompts
+        - Keep only the actual article/content
+        - Format with proper markdown headers (##, ###)
+        - Preserve all facts and information
+        - Use bullet points for lists
+        - Include any relevant dates, numbers, statistics
+        Do not add any commentary or analysis."""
+    )
+    
+    category: str = dspy.OutputField(
+        description="""A single specific category that best describes the content."""
+    )
