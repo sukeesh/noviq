@@ -5,18 +5,37 @@ from noviq.signatures import (
     GenerateWebSearchQueries, 
     CleanAndClassifyWebpageText
 )
+import ollama
+import inquirer
 
+def select_model():
+    list_of_models = ollama.list()
+    choices = [model['model'] for model in list_of_models['models']]
+    
+    questions = [
+        inquirer.List('model',
+                     message="Select the model you want to use",
+                     choices=choices,
+                     carousel=True)
+    ]
+    
+    answers = inquirer.prompt(questions)
+    return answers['model']
+
+# Get user selected model
+selected_model = select_model()
+print(f"Selected model: {selected_model}")
+
+# Configure DSPy with selected model
+lm = dspy.LM(f'ollama_chat/{selected_model}', api_base='http://localhost:11434')
+dspy.configure(lm=lm)
 
 user_intent = input("Enter your research intent: ")
-
-lm = dspy.LM('ollama_chat/llama3.2:latest', api_base='http://localhost:11434')
-dspy.configure(lm=lm)
 
 clarifying_question = dspy.ChainOfThought(GenerateClarifyingQuestions)
 research_plan = dspy.ChainOfThought(PrepareForResearch)
 generate_web_search_queries = dspy.ChainOfThought(GenerateWebSearchQueries)
 clean_webpage_text = dspy.ChainOfThought(CleanAndClassifyWebpageText)
-
 
 questions = clarifying_question(user_intent=user_intent)
 
@@ -26,7 +45,6 @@ print("Clarifying Questions:")
 for question in questions.clarifying_questions:
     answer = input(question + "  ")
     qa_pairs.append((question, answer))
-
 
 plan = research_plan(user_intent=user_intent, qa_pairs=qa_pairs)
 
@@ -61,7 +79,6 @@ def get_search_queries(search_query) -> list[tuple[str, str]]:
         print(f"Error fetching search results: {e}")
         return []
 
-
 def get_webpage_text(url: str) -> str:
     import requests
     from bs4 import BeautifulSoup
@@ -92,8 +109,6 @@ def get_webpage_text(url: str) -> str:
     except Exception as e:
         print(f"Error fetching webpage content: {e}")
         return ""
-
-
 
 print("Research Plan:")
 for step in plan.research_plan:
