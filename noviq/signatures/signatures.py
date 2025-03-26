@@ -94,14 +94,54 @@ class PrepareForResearch(dspy.Signature):
 
 
 class GenerateWebSearchQueries(dspy.Signature):
-    """Generate a list of web search queries based on the research plan step.
-    The web search queries should be well detailed and include all the steps needed to get the best answer."""
+    """Generate focused, concrete web search queries based on the research plan step.
+    
+    Rules:
+    1. Generate 4-5 highly targeted queries per research step
+    2. Include specific details from user intent and QA pairs
+    3. Focus on recent and relevant information
+    4. Use proper search operators (+, quotes) for precision
+    5. Make queries specific and actionable
+    """
 
-    user_intent: str = dspy.InputField(description="The user's intent for the query.")
-    qa_pairs: list[tuple[str, str]] = dspy.InputField(description="A list of qa pairs.")
-    overall_research_plan: list[str] = dspy.InputField(description="The overall research plan to help the user get the best answer.")
-    research_plan_step: str = dspy.InputField(description="A research plan step for which we need to generate web search queries to help the user get the best answer.")
-    web_search_queries: list[str] = dspy.OutputField(description="A list of web search queries to help the user get the best answer for this current step.")
+    user_intent: str = dspy.InputField(
+        description="""The user's research query or topic they want to explore.
+        Use this to ensure queries align with the user's goals."""
+    )
+    
+    qa_pairs: list[tuple[str, str]] = dspy.InputField(
+        description="""List of (question, answer) pairs from clarifying questions.
+        Use these to add specific context and requirements to the queries."""
+    )
+    
+    overall_research_plan: list[str] = dspy.InputField(
+        description="""The complete research plan.
+        Use this to ensure queries align with the overall research direction."""
+    )
+    
+    research_plan_step: str = dspy.InputField(
+        description="""The specific research step to generate queries for.
+        Focus on creating queries that directly address this step's goals."""
+    )
+    
+    web_search_queries: list[str] = dspy.OutputField(
+        description="""A list of 4-5 focused, concrete web search queries. Each query should:
+        1. Include relevant details from user intent and QA pairs
+        2. Use proper search operators (+, quotes) for precision
+        3. Focus on recent information (last 1-2 years)
+        4. Be specific enough to yield targeted results
+        5. Combine related terms effectively
+        
+        Example format:
+        "specific topic" + "relevant context" + "additional details"
+        
+        Guidelines:
+        - Keep queries focused and specific
+        - Include important details from QA pairs
+        - Use quotes for exact phrases
+        - Use + operator to combine related terms
+        - Avoid too many variations of the same query"""
+    )
 
 
 class CleanAndClassifyWebpageText(dspy.Signature):

@@ -1,5 +1,5 @@
 import dspy
-from noviq.signatures import (
+from noviq.signatures.signatures import (
     GenerateClarifyingQuestions, 
     PrepareForResearch, 
     GenerateWebSearchQueries, 
@@ -53,15 +53,13 @@ for question in questions.clarifying_questions:
 
 plan = research_plan(user_intent=user_intent, qa_pairs=qa_pairs)
 
-for step in plan.research_plan:
-    print(step + "\n")
-
-# exit()
-
 print("Research Plan:")
-for step in plan.research_plan[:2]:  # Limit to first 2 steps
-    print(f"\nExecuting step: {step}")
+for step in plan.research_plan:
     web_search_queries = generate_web_search_queries(user_intent=user_intent, qa_pairs=qa_pairs, overall_research_plan=plan.research_plan, research_plan_step=step)
+    print("Generating web search queries for: " + step + "\n")
+    print(web_search_queries.web_search_queries)
+    # continue
+
     queries = web_search_queries.web_search_queries[:1]  # Take only first query
 
     scraped_webpage_texts = []
