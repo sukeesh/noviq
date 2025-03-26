@@ -8,6 +8,9 @@ from noviq.signatures import (
 )
 import ollama
 import inquirer
+from noviq.scrape.scrape import Scrape, BeautifulSoupScrape, HTTPScrape
+from noviq.tools.tools import get_search_queries
+
 
 def select_model():
     list_of_models = ollama.list()
@@ -50,67 +53,10 @@ for question in questions.clarifying_questions:
 
 plan = research_plan(user_intent=user_intent, qa_pairs=qa_pairs)
 
-def get_search_queries(search_query) -> list[tuple[str, str]]:
-    import requests
-    from bs4 import BeautifulSoup
-    from urllib.parse import quote
+for step in plan.research_plan:
+    print(step + "\n")
 
-    # DuckDuckGo HTML search
-    url = f"https://html.duckduckgo.com/html/?q={quote(search_query)}"
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-    }
-    
-    try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()
-        soup = BeautifulSoup(response.text, 'html.parser')
-        
-        results = []
-        for result in soup.select('.result')[:5]:  # Get top 5 results
-            title_elem = result.select_one('.result__title')
-            link_elem = result.select_one('.result__url')
-            if title_elem and link_elem:
-                title = title_elem.get_text(strip=True)
-                link = link_elem.get('href')
-                if link:
-                    results.append((title, link))
-        
-        return results
-    except Exception as e:
-        print(f"Error fetching search results: {e}")
-        return []
-
-def get_webpage_text(url: str) -> str:
-    import requests
-    from bs4 import BeautifulSoup
-    from urllib.parse import urljoin
-
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-    }
-    
-    try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()
-        
-        # Parse HTML
-        soup = BeautifulSoup(response.text, 'html.parser')
-        
-        # Remove script and style elements
-        for script in soup(["script", "style"]):
-            script.decompose()
-            
-        # Get text and clean it up
-        text = soup.get_text()
-        lines = (line.strip() for line in text.splitlines())
-        chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
-        text = ' '.join(chunk for chunk in chunks if chunk)
-        
-        return text
-    except Exception as e:
-        print(f"Error fetching webpage content: {e}")
-        return ""
+# exit()
 
 print("Research Plan:")
 for step in plan.research_plan[:2]:  # Limit to first 2 steps
@@ -127,8 +73,9 @@ for step in plan.research_plan[:2]:  # Limit to first 2 steps
         if results:
             text, url = results[0]
             print(f"Title: {text}\nURL: {url}\n")
-            content = get_webpage_text(url)
-            print("Content length: ", len(content))  # Print length instead of full content
+            
+            scrape = BeautifulSoupScrape(url)
+            content = scrape.scrape()
 
             cleaned_content = clean_webpage_text(user_intent=user_intent, webpage_text=content)
 
