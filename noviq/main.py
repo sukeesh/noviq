@@ -32,7 +32,12 @@ selected_model = select_model()
 print(f"Selected model: {selected_model}")
 
 # Configure DSPy with selected model
-lm = dspy.LM(model=f'ollama_chat/{selected_model}', api_base='http://localhost:11434')
+lm = dspy.LM(
+    model=selected_model,  # Use just the model name
+    api_base='http://localhost:11434',
+    model_type='chat',  # Specify it's a chat model
+    api_provider='ollama'  # Specify the provider
+)
 dspy.configure(lm=lm)
 
 user_intent = input("Enter your research intent: ")

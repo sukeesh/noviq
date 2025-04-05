@@ -1,0 +1,396 @@
+2025-04-05 19:07:22,562 [INFO] [20250405190722] New research session created
+2025-04-05 19:07:22,562 [INFO] [20250405190722] Getting available models
+2025-04-05 19:07:22,562 [DEBUG] connect_tcp.started host='127.0.0.1' port=11434 local_address=None timeout=None socket_options=None
+2025-04-05 19:07:22,562 [DEBUG] connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x10641f090>
+2025-04-05 19:07:22,562 [DEBUG] send_request_headers.started request=<Request [b'GET']>
+2025-04-05 19:07:22,562 [DEBUG] send_request_headers.complete
+2025-04-05 19:07:22,562 [DEBUG] send_request_body.started request=<Request [b'GET']>
+2025-04-05 19:07:22,562 [DEBUG] send_request_body.complete
+2025-04-05 19:07:22,562 [DEBUG] receive_response_headers.started request=<Request [b'GET']>
+2025-04-05 19:07:22,566 [DEBUG] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=utf-8'), (b'Date', b'Sat, 05 Apr 2025 13:37:22 GMT'), (b'Content-Length', b'684')])
+2025-04-05 19:07:22,566 [INFO] HTTP Request: GET http://127.0.0.1:11434/api/tags "HTTP/1.1 200 OK"
+2025-04-05 19:07:22,566 [DEBUG] receive_response_body.started request=<Request [b'GET']>
+2025-04-05 19:07:22,566 [DEBUG] receive_response_body.complete
+2025-04-05 19:07:22,566 [DEBUG] response_closed.started
+2025-04-05 19:07:22,566 [DEBUG] response_closed.complete
+2025-04-05 19:07:22,566 [INFO] [20250405190722] Found 2 models in 0.00s
+2025-04-05 19:07:22,570 [INFO] [20250405190722] New research session created
+2025-04-05 19:07:22,570 [INFO] [20250405190722] Getting available models
+2025-04-05 19:07:22,570 [DEBUG] send_request_headers.started request=<Request [b'GET']>
+2025-04-05 19:07:22,570 [DEBUG] send_request_headers.complete
+2025-04-05 19:07:22,570 [DEBUG] send_request_body.started request=<Request [b'GET']>
+2025-04-05 19:07:22,570 [DEBUG] send_request_body.complete
+2025-04-05 19:07:22,570 [DEBUG] receive_response_headers.started request=<Request [b'GET']>
+2025-04-05 19:07:22,572 [DEBUG] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=utf-8'), (b'Date', b'Sat, 05 Apr 2025 13:37:22 GMT'), (b'Content-Length', b'684')])
+2025-04-05 19:07:22,572 [INFO] HTTP Request: GET http://127.0.0.1:11434/api/tags "HTTP/1.1 200 OK"
+2025-04-05 19:07:22,572 [DEBUG] receive_response_body.started request=<Request [b'GET']>
+2025-04-05 19:07:22,572 [DEBUG] receive_response_body.complete
+2025-04-05 19:07:22,572 [DEBUG] response_closed.started
+2025-04-05 19:07:22,572 [DEBUG] response_closed.complete
+2025-04-05 19:07:22,572 [INFO] [20250405190722] Found 2 models in 0.00s
+2025-04-05 19:07:31,988 [INFO] [20250405190731] New research session created
+2025-04-05 19:07:31,988 [INFO] [20250405190731] Configuring model: llama3.2:latest
+2025-04-05 19:07:31,988 [INFO] [20250405190731] Model configured successfully in 0.00s
+2025-04-05 19:07:31,989 [INFO] [20250405190731] Setting user intent: business plan of cricket...
+2025-04-05 19:07:31,989 [INFO] [20250405190731] User intent set, current step: intent_set
+2025-04-05 19:07:31,997 [INFO] [20250405190731] Generating clarifying questions
+2025-04-05 19:07:31,997 [INFO] [20250405190731] Creating GenerateClarifyingQuestions instance
+2025-04-05 19:07:31,998 [INFO] [20250405190731] Calling LLM to generate questions
+2025-04-05 19:07:31,998 [DEBUG] 
+
+2025-04-05 19:07:31,998 [DEBUG] [92mRequest to litellm:[0m
+2025-04-05 19:07:31,998 [DEBUG] [92mlitellm.completion(cache={'no-cache': False, 'no-store': False}, retry_policy=RetryPolicy(BadRequestErrorRetries=0, AuthenticationErrorRetries=0, TimeoutErrorRetries=8, RateLimitErrorRetries=8, ContentPolicyViolationErrorRetries=8, InternalServerErrorRetries=8), max_retries=0, model='ollama_chat/llama3.2:latest', messages=[{'role': 'system', 'content': 'Your input fields are:\n1. `user_intent` (str): The user\'s research request. Your job is to understand their personal context, \n        not to have them explain the topic to you.\n\nYour output fields are:\n1. `reasoning` (str)\n2. `clarifying_questions` (list[str]): A list of 2-3 questions focused ONLY on understanding the user\'s personal context.\n        \n        GOOD questions (about the USER, not the topic):\n        - "What is your background or experience level with this subject?"\n        - "What is your main goal or purpose for researching this topic?"\n        - "Do you need a general overview or specific details on certain aspects?"\n        - "What format or level of detail would be most helpful for you?"\n        - "Is there a specific time period or geographic focus that interests you?"\n        - "Are there any particular perspectives or viewpoints you want included?"\n        \n        BAD questions (asking for topic expertise - NEVER ASK THESE):\n        - "What are the technical aspects of X that drive Y?"\n        - "How does X impact Y in the industry?"\n        - "What are the specific issues with X?"\n        \n        Each question must be about the USER\'s context, preferences, or constraints - NEVER about technical aspects of the topic itself.\n        The user is coming to YOU for research - don\'t ask them to do the research!\n\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## user_intent ## ]]\n{user_intent}\n\n[[ ## reasoning ## ]]\n{reasoning}\n\n[[ ## clarifying_questions ## ]]\n{clarifying_questions}        # note: the value you produce must adhere to the JSON schema: {"type": "array", "items": {"type": "string"}}\n\n[[ ## completed ## ]]\n\nIn adhering to this structure, your objective is: \n        Generate clarifying questions to understand the user\'s personal context and preferences for the research.\n        \n        Rules:\n        1. Focus ONLY on the user\'s PERSONAL context - their goals, preferences, and background\n        2. NEVER ask the user to provide technical information about the research topic\n        3. Questions should help understand the USER, not the topic\n        4. Ask about the user\'s needs, constraints, preferences, and experience level\n        5. Assume the user is asking YOU to research the topic - don\'t ask them to explain it\n        6. Questions should be easy for anyone to answer about THEMSELVES\n        \n        CRITICAL: Do NOT ask questions that require domain expertise or technical knowledge about the topic!'}, {'role': 'user', 'content': '[[ ## user_intent ## ]]\nbusiness plan of cricket\n\nRespond with the corresponding output fields, starting with the field `[[ ## reasoning ## ]]`, then `[[ ## clarifying_questions ## ]]` (must be formatted as a valid Python list[str]), and then ending with the marker for `[[ ## completed ## ]]`.'}], temperature=0.0, max_tokens=1000, api_base='http://localhost:11434')[0m
+2025-04-05 19:07:31,998 [DEBUG] 
+
+2025-04-05 19:07:31,999 [DEBUG] self.optional_params: {}
+2025-04-05 19:07:31,999 [DEBUG] SYNC kwargs[caching]: False; litellm.cache: <litellm.caching.caching.Cache object at 0x109200910>; kwargs.get('cache')['no-cache']: False
+2025-04-05 19:07:31,999 [DEBUG] INSIDE CHECKING SYNC CACHE
+2025-04-05 19:07:31,999 [DEBUG] 
+Created cache key: model: ollama_chat/llama3.2:latestmessages: [{'role': 'system', 'content': 'Your input fields are:\n1. `user_intent` (str): The user\'s research request. Your job is to understand their personal context, \n        not to have them explain the topic to you.\n\nYour output fields are:\n1. `reasoning` (str)\n2. `clarifying_questions` (list[str]): A list of 2-3 questions focused ONLY on understanding the user\'s personal context.\n        \n        GOOD questions (about the USER, not the topic):\n        - "What is your background or experience level with this subject?"\n        - "What is your main goal or purpose for researching this topic?"\n        - "Do you need a general overview or specific details on certain aspects?"\n        - "What format or level of detail would be most helpful for you?"\n        - "Is there a specific time period or geographic focus that interests you?"\n        - "Are there any particular perspectives or viewpoints you want included?"\n        \n        BAD questions (asking for topic expertise - NEVER ASK THESE):\n        - "What are the technical aspects of X that drive Y?"\n        - "How does X impact Y in the industry?"\n        - "What are the specific issues with X?"\n        \n        Each question must be about the USER\'s context, preferences, or constraints - NEVER about technical aspects of the topic itself.\n        The user is coming to YOU for research - don\'t ask them to do the research!\n\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## user_intent ## ]]\n{user_intent}\n\n[[ ## reasoning ## ]]\n{reasoning}\n\n[[ ## clarifying_questions ## ]]\n{clarifying_questions}        # note: the value you produce must adhere to the JSON schema: {"type": "array", "items": {"type": "string"}}\n\n[[ ## completed ## ]]\n\nIn adhering to this structure, your objective is: \n        Generate clarifying questions to understand the user\'s personal context and preferences for the research.\n        \n        Rules:\n        1. Focus ONLY on the user\'s PERSONAL context - their goals, preferences, and background\n        2. NEVER ask the user to provide technical information about the research topic\n        3. Questions should help understand the USER, not the topic\n        4. Ask about the user\'s needs, constraints, preferences, and experience level\n        5. Assume the user is asking YOU to research the topic - don\'t ask them to explain it\n        6. Questions should be easy for anyone to answer about THEMSELVES\n        \n        CRITICAL: Do NOT ask questions that require domain expertise or technical knowledge about the topic!'}, {'role': 'user', 'content': '[[ ## user_intent ## ]]\nbusiness plan of cricket\n\nRespond with the corresponding output fields, starting with the field `[[ ## reasoning ## ]]`, then `[[ ## clarifying_questions ## ]]` (must be formatted as a valid Python list[str]), and then ending with the marker for `[[ ## completed ## ]]`.'}]temperature: 0.0max_tokens: 1000
+2025-04-05 19:07:31,999 [DEBUG] Hashed cache key (SHA-256): 9916da40ea123ff83e9fc25d1490110ca21abfde91f53dfadf094222540128bd
+2025-04-05 19:07:31,999 [DEBUG] Final hashed key: 9916da40ea123ff83e9fc25d1490110ca21abfde91f53dfadf094222540128bd
+2025-04-05 19:07:32,003 [INFO] 
+LiteLLM completion() model= llama3.2:latest; provider = ollama_chat
+2025-04-05 19:07:32,003 [DEBUG] 
+LiteLLM: Params passed to completion() {'model': 'llama3.2:latest', 'functions': None, 'function_call': None, 'temperature': 0.0, 'top_p': None, 'n': None, 'stream': None, 'stream_options': None, 'stop': None, 'max_tokens': 1000, 'max_completion_tokens': None, 'modalities': None, 'prediction': None, 'audio': None, 'presence_penalty': None, 'frequency_penalty': None, 'logit_bias': None, 'user': None, 'custom_llm_provider': 'ollama_chat', 'response_format': None, 'seed': None, 'tools': None, 'tool_choice': None, 'max_retries': 0, 'logprobs': None, 'top_logprobs': None, 'extra_headers': None, 'api_version': None, 'parallel_tool_calls': None, 'drop_params': None, 'reasoning_effort': None, 'additional_drop_params': None, 'messages': [{'role': 'system', 'content': 'Your input fields are:\n1. `user_intent` (str): The user\'s research request. Your job is to understand their personal context, \n        not to have them explain the topic to you.\n\nYour output fields are:\n1. `reasoning` (str)\n2. `clarifying_questions` (list[str]): A list of 2-3 questions focused ONLY on understanding the user\'s personal context.\n        \n        GOOD questions (about the USER, not the topic):\n        - "What is your background or experience level with this subject?"\n        - "What is your main goal or purpose for researching this topic?"\n        - "Do you need a general overview or specific details on certain aspects?"\n        - "What format or level of detail would be most helpful for you?"\n        - "Is there a specific time period or geographic focus that interests you?"\n        - "Are there any particular perspectives or viewpoints you want included?"\n        \n        BAD questions (asking for topic expertise - NEVER ASK THESE):\n        - "What are the technical aspects of X that drive Y?"\n        - "How does X impact Y in the industry?"\n        - "What are the specific issues with X?"\n        \n        Each question must be about the USER\'s context, preferences, or constraints - NEVER about technical aspects of the topic itself.\n        The user is coming to YOU for research - don\'t ask them to do the research!\n\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## user_intent ## ]]\n{user_intent}\n\n[[ ## reasoning ## ]]\n{reasoning}\n\n[[ ## clarifying_questions ## ]]\n{clarifying_questions}        # note: the value you produce must adhere to the JSON schema: {"type": "array", "items": {"type": "string"}}\n\n[[ ## completed ## ]]\n\nIn adhering to this structure, your objective is: \n        Generate clarifying questions to understand the user\'s personal context and preferences for the research.\n        \n        Rules:\n        1. Focus ONLY on the user\'s PERSONAL context - their goals, preferences, and background\n        2. NEVER ask the user to provide technical information about the research topic\n        3. Questions should help understand the USER, not the topic\n        4. Ask about the user\'s needs, constraints, preferences, and experience level\n        5. Assume the user is asking YOU to research the topic - don\'t ask them to explain it\n        6. Questions should be easy for anyone to answer about THEMSELVES\n        \n        CRITICAL: Do NOT ask questions that require domain expertise or technical knowledge about the topic!'}, {'role': 'user', 'content': '[[ ## user_intent ## ]]\nbusiness plan of cricket\n\nRespond with the corresponding output fields, starting with the field `[[ ## reasoning ## ]]`, then `[[ ## clarifying_questions ## ]]` (must be formatted as a valid Python list[str]), and then ending with the marker for `[[ ## completed ## ]]`.'}], 'thinking': None}
+2025-04-05 19:07:32,004 [DEBUG] 
+LiteLLM: Non-Default params passed to completion() {'temperature': 0.0, 'max_tokens': 1000, 'max_retries': 0}
+2025-04-05 19:07:32,004 [DEBUG] Final returned optional params: {'temperature': 0.0, 'num_predict': 1000}
+2025-04-05 19:07:32,004 [DEBUG] self.optional_params: {'temperature': 0.0, 'num_predict': 1000}
+2025-04-05 19:07:32,004 [DEBUG] [92m
+
+POST Request Sent from LiteLLM:
+curl -X POST \
+http://localhost:11434/api/chat \
+-d '{'model': 'llama3.2:latest', 'messages': [{'role': 'system', 'content': 'Your input fields are:\n1. `user_intent` (str): The user\'s research request. Your job is to understand their personal context, \n        not to have them explain the topic to you.\n\nYour output fields are:\n1. `reasoning` (str)\n2. `clarifying_questions` (list[str]): A list of 2-3 questions focused ONLY on understanding the user\'s personal context.\n        \n        GOOD questions (about the USER, not the topic):\n        - "What is your background or experience level with this subject?"\n        - "What is your main goal or purpose for researching this topic?"\n        - "Do you need a general overview or specific details on certain aspects?"\n        - "What format or level of detail would be most helpful for you?"\n        - "Is there a specific time period or geographic focus that interests you?"\n        - "Are there any particular perspectives or viewpoints you want included?"\n        \n        BAD questions (asking for topic expertise - NEVER ASK THESE):\n        - "What are the technical aspects of X that drive Y?"\n        - "How does X impact Y in the industry?"\n        - "What are the specific issues with X?"\n        \n        Each question must be about the USER\'s context, preferences, or constraints - NEVER about technical aspects of the topic itself.\n        The user is coming to YOU for research - don\'t ask them to do the research!\n\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## user_intent ## ]]\n{user_intent}\n\n[[ ## reasoning ## ]]\n{reasoning}\n\n[[ ## clarifying_questions ## ]]\n{clarifying_questions}        # note: the value you produce must adhere to the JSON schema: {"type": "array", "items": {"type": "string"}}\n\n[[ ## completed ## ]]\n\nIn adhering to this structure, your objective is: \n        Generate clarifying questions to understand the user\'s personal context and preferences for the research.\n        \n        Rules:\n        1. Focus ONLY on the user\'s PERSONAL context - their goals, preferences, and background\n        2. NEVER ask the user to provide technical information about the research topic\n        3. Questions should help understand the USER, not the topic\n        4. Ask about the user\'s needs, constraints, preferences, and experience level\n        5. Assume the user is asking YOU to research the topic - don\'t ask them to explain it\n        6. Questions should be easy for anyone to answer about THEMSELVES\n        \n        CRITICAL: Do NOT ask questions that require domain expertise or technical knowledge about the topic!'}, {'role': 'user', 'content': '[[ ## user_intent ## ]]\nbusiness plan of cricket\n\nRespond with the corresponding output fields, starting with the field `[[ ## reasoning ## ]]`, then `[[ ## clarifying_questions ## ]]` (must be formatted as a valid Python list[str]), and then ending with the marker for `[[ ## completed ## ]]`.'}], 'options': {'temperature': 0.0, 'num_predict': 1000}, 'stream': False}'
+[0m
+
+2025-04-05 19:07:32,004 [DEBUG] connect_tcp.started host='localhost' port=11434 local_address=None timeout=6000 socket_options=None
+2025-04-05 19:07:32,005 [DEBUG] connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x105c658d0>
+2025-04-05 19:07:32,005 [DEBUG] send_request_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:32,005 [DEBUG] send_request_headers.complete
+2025-04-05 19:07:32,005 [DEBUG] send_request_body.started request=<Request [b'POST']>
+2025-04-05 19:07:32,005 [DEBUG] send_request_body.complete
+2025-04-05 19:07:32,005 [DEBUG] receive_response_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:35,620 [DEBUG] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=utf-8'), (b'Date', b'Sat, 05 Apr 2025 13:37:35 GMT'), (b'Content-Length', b'806')])
+2025-04-05 19:07:35,621 [INFO] HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+2025-04-05 19:07:35,621 [DEBUG] receive_response_body.started request=<Request [b'POST']>
+2025-04-05 19:07:35,621 [DEBUG] receive_response_body.complete
+2025-04-05 19:07:35,621 [DEBUG] response_closed.started
+2025-04-05 19:07:35,621 [DEBUG] response_closed.complete
+2025-04-05 19:07:35,622 [DEBUG] RAW RESPONSE:
+{"model":"llama3.2:latest","created_at":"2025-04-05T13:37:35.619377Z","message":{"role":"assistant","content":"[[ ## reasoning ## ]]\nA business plan for cricket involves outlining strategies, goals, and financial projections for a cricket-related venture. This could include a sports team, tournament organization, equipment manufacturing, or other related businesses.\n\n[[ ## clarifying_questions ## ]]\n['What is your role in the cricket industry, if any?', 'Are you looking to start a new business or expand an existing one?', 'Do you have a specific budget in mind for your venture?']\n\n[[ ## completed ## ]]"},"done_reason":"stop","done":true,"total_duration":3613735917,"load_duration":696752625,"prompt_eval_count":625,"prompt_eval_duration":1003569833,"eval_count":98,"eval_duration":1909669125}
+
+
+2025-04-05 19:07:35,623 [DEBUG] token_counter messages received: [{'role': 'system', 'content': 'Your input fields are:\n1. `user_intent` (str): The user\'s research request. Your job is to understand their personal context, \n        not to have them explain the topic to you.\n\nYour output fields are:\n1. `reasoning` (str)\n2. `clarifying_questions` (list[str]): A list of 2-3 questions focused ONLY on understanding the user\'s personal context.\n        \n        GOOD questions (about the USER, not the topic):\n        - "What is your background or experience level with this subject?"\n        - "What is your main goal or purpose for researching this topic?"\n        - "Do you need a general overview or specific details on certain aspects?"\n        - "What format or level of detail would be most helpful for you?"\n        - "Is there a specific time period or geographic focus that interests you?"\n        - "Are there any particular perspectives or viewpoints you want included?"\n        \n        BAD questions (asking for topic expertise - NEVER ASK THESE):\n        - "What are the technical aspects of X that drive Y?"\n        - "How does X impact Y in the industry?"\n        - "What are the specific issues with X?"\n        \n        Each question must be about the USER\'s context, preferences, or constraints - NEVER about technical aspects of the topic itself.\n        The user is coming to YOU for research - don\'t ask them to do the research!\n\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## user_intent ## ]]\n{user_intent}\n\n[[ ## reasoning ## ]]\n{reasoning}\n\n[[ ## clarifying_questions ## ]]\n{clarifying_questions}        # note: the value you produce must adhere to the JSON schema: {"type": "array", "items": {"type": "string"}}\n\n[[ ## completed ## ]]\n\nIn adhering to this structure, your objective is: \n        Generate clarifying questions to understand the user\'s personal context and preferences for the research.\n        \n        Rules:\n        1. Focus ONLY on the user\'s PERSONAL context - their goals, preferences, and background\n        2. NEVER ask the user to provide technical information about the research topic\n        3. Questions should help understand the USER, not the topic\n        4. Ask about the user\'s needs, constraints, preferences, and experience level\n        5. Assume the user is asking YOU to research the topic - don\'t ask them to explain it\n        6. Questions should be easy for anyone to answer about THEMSELVES\n        \n        CRITICAL: Do NOT ask questions that require domain expertise or technical knowledge about the topic!'}, {'role': 'user', 'content': '[[ ## user_intent ## ]]\nbusiness plan of cricket\n\nRespond with the corresponding output fields, starting with the field `[[ ## reasoning ## ]]`, then `[[ ## clarifying_questions ## ]]` (must be formatted as a valid Python list[str]), and then ending with the marker for `[[ ## completed ## ]]`.'}]
+2025-04-05 19:07:35,624 [DEBUG] Token Counter - using generic token counter, for model=
+2025-04-05 19:07:35,624 [DEBUG] LiteLLM: Utils - Counting tokens for OpenAI model=gpt-3.5-turbo
+2025-04-05 19:07:35,626 [DEBUG] Token Counter - using generic token counter, for model=
+2025-04-05 19:07:35,626 [DEBUG] LiteLLM: Utils - Counting tokens for OpenAI model=gpt-3.5-turbo
+2025-04-05 19:07:35,627 [DEBUG] 
+Created cache key: model: ollama_chat/llama3.2:latestmessages: [{'role': 'system', 'content': 'Your input fields are:\n1. `user_intent` (str): The user\'s research request. Your job is to understand their personal context, \n        not to have them explain the topic to you.\n\nYour output fields are:\n1. `reasoning` (str)\n2. `clarifying_questions` (list[str]): A list of 2-3 questions focused ONLY on understanding the user\'s personal context.\n        \n        GOOD questions (about the USER, not the topic):\n        - "What is your background or experience level with this subject?"\n        - "What is your main goal or purpose for researching this topic?"\n        - "Do you need a general overview or specific details on certain aspects?"\n        - "What format or level of detail would be most helpful for you?"\n        - "Is there a specific time period or geographic focus that interests you?"\n        - "Are there any particular perspectives or viewpoints you want included?"\n        \n        BAD questions (asking for topic expertise - NEVER ASK THESE):\n        - "What are the technical aspects of X that drive Y?"\n        - "How does X impact Y in the industry?"\n        - "What are the specific issues with X?"\n        \n        Each question must be about the USER\'s context, preferences, or constraints - NEVER about technical aspects of the topic itself.\n        The user is coming to YOU for research - don\'t ask them to do the research!\n\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## user_intent ## ]]\n{user_intent}\n\n[[ ## reasoning ## ]]\n{reasoning}\n\n[[ ## clarifying_questions ## ]]\n{clarifying_questions}        # note: the value you produce must adhere to the JSON schema: {"type": "array", "items": {"type": "string"}}\n\n[[ ## completed ## ]]\n\nIn adhering to this structure, your objective is: \n        Generate clarifying questions to understand the user\'s personal context and preferences for the research.\n        \n        Rules:\n        1. Focus ONLY on the user\'s PERSONAL context - their goals, preferences, and background\n        2. NEVER ask the user to provide technical information about the research topic\n        3. Questions should help understand the USER, not the topic\n        4. Ask about the user\'s needs, constraints, preferences, and experience level\n        5. Assume the user is asking YOU to research the topic - don\'t ask them to explain it\n        6. Questions should be easy for anyone to answer about THEMSELVES\n        \n        CRITICAL: Do NOT ask questions that require domain expertise or technical knowledge about the topic!'}, {'role': 'user', 'content': '[[ ## user_intent ## ]]\nbusiness plan of cricket\n\nRespond with the corresponding output fields, starting with the field `[[ ## reasoning ## ]]`, then `[[ ## clarifying_questions ## ]]` (must be formatted as a valid Python list[str]), and then ending with the marker for `[[ ## completed ## ]]`.'}]temperature: 0.0max_tokens: 1000
+2025-04-05 19:07:35,628 [DEBUG] Hashed cache key (SHA-256): 9916da40ea123ff83e9fc25d1490110ca21abfde91f53dfadf094222540128bd
+2025-04-05 19:07:35,628 [DEBUG] Final hashed key: 9916da40ea123ff83e9fc25d1490110ca21abfde91f53dfadf094222540128bd
+2025-04-05 19:07:35,632 [INFO] Wrapper: Completed Call, calling success_handler
+2025-04-05 19:07:35,632 [DEBUG] Logging Details LiteLLM-Success Call: Cache_hit=None
+2025-04-05 19:07:35,632 [INFO] selected model name for cost calculation: ollama_chat/llama3.2:latest
+2025-04-05 19:07:35,632 [INFO] selected model name for cost calculation: ollama_chat/llama3.2:latest
+2025-04-05 19:07:35,633 [DEBUG] checking potential_model_names in litellm.model_cost: {'split_model': 'llama3.2:latest', 'combined_model_name': 'ollama_chat/llama3.2:latest', 'stripped_model_name': 'llama3.2:latest', 'combined_stripped_model_name': 'ollama_chat/llama3.2:latest', 'custom_llm_provider': 'ollama_chat'}
+2025-04-05 19:07:35,633 [DEBUG] checking potential_model_names in litellm.model_cost: {'split_model': 'llama3.2:latest', 'combined_model_name': 'ollama_chat/llama3.2:latest', 'stripped_model_name': 'llama3.2:latest', 'combined_stripped_model_name': 'ollama_chat/llama3.2:latest', 'custom_llm_provider': 'ollama_chat'}
+2025-04-05 19:07:35,634 [DEBUG] send_request_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:35,634 [DEBUG] connect_tcp.started host='localhost' port=11434 local_address=None timeout=6000 socket_options=None
+2025-04-05 19:07:35,634 [DEBUG] send_request_headers.complete
+2025-04-05 19:07:35,634 [DEBUG] send_request_body.started request=<Request [b'POST']>
+2025-04-05 19:07:35,634 [DEBUG] send_request_body.complete
+2025-04-05 19:07:35,634 [DEBUG] receive_response_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:35,634 [DEBUG] connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x109ccef10>
+2025-04-05 19:07:35,635 [DEBUG] send_request_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:35,635 [DEBUG] send_request_headers.complete
+2025-04-05 19:07:35,635 [DEBUG] send_request_body.started request=<Request [b'POST']>
+2025-04-05 19:07:35,635 [DEBUG] send_request_body.complete
+2025-04-05 19:07:35,635 [DEBUG] receive_response_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:35,655 [DEBUG] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=utf-8'), (b'Date', b'Sat, 05 Apr 2025 13:37:35 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-04-05 19:07:35,655 [DEBUG] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=utf-8'), (b'Date', b'Sat, 05 Apr 2025 13:37:35 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-04-05 19:07:35,656 [INFO] HTTP Request: POST http://localhost:11434/api/show "HTTP/1.1 200 OK"
+2025-04-05 19:07:35,656 [INFO] HTTP Request: POST http://localhost:11434/api/show "HTTP/1.1 200 OK"
+2025-04-05 19:07:35,656 [DEBUG] receive_response_body.started request=<Request [b'POST']>
+2025-04-05 19:07:35,656 [DEBUG] receive_response_body.started request=<Request [b'POST']>
+2025-04-05 19:07:35,656 [DEBUG] receive_response_body.complete
+2025-04-05 19:07:35,657 [DEBUG] receive_response_body.complete
+2025-04-05 19:07:35,657 [DEBUG] response_closed.started
+2025-04-05 19:07:35,657 [DEBUG] response_closed.started
+2025-04-05 19:07:35,657 [DEBUG] response_closed.complete
+2025-04-05 19:07:35,657 [DEBUG] response_closed.complete
+2025-04-05 19:07:35,658 [DEBUG] Returned custom cost for model=ollama_chat/llama3.2:latest - prompt_tokens_cost_usd_dollar: 0, completion_tokens_cost_usd_dollar: 0
+2025-04-05 19:07:35,659 [DEBUG] Returned custom cost for model=ollama_chat/llama3.2:latest - prompt_tokens_cost_usd_dollar: 0, completion_tokens_cost_usd_dollar: 0
+2025-04-05 19:07:35,659 [DEBUG] response_cost: 0
+2025-04-05 19:07:35,659 [DEBUG] response_cost: 0
+2025-04-05 19:07:35,660 [INFO] [20250405190731] Generated 3 questions in 3.66s
+2025-04-05 19:07:35,659 [DEBUG] checking potential_model_names in litellm.model_cost: {'split_model': 'llama3.2:latest', 'combined_model_name': 'ollama_chat/llama3.2:latest', 'stripped_model_name': 'llama3.2:latest', 'combined_stripped_model_name': 'ollama_chat/llama3.2:latest', 'custom_llm_provider': 'ollama_chat'}
+2025-04-05 19:07:35,661 [INFO] [20250405190731] Questions: What is your role in the crick..., Are you looking to start a new..., Do you have a specific budget ...
+2025-04-05 19:07:35,662 [DEBUG] send_request_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:35,662 [DEBUG] send_request_headers.complete
+2025-04-05 19:07:35,662 [DEBUG] send_request_body.started request=<Request [b'POST']>
+2025-04-05 19:07:35,662 [DEBUG] send_request_body.complete
+2025-04-05 19:07:35,663 [DEBUG] receive_response_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:35,681 [DEBUG] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=utf-8'), (b'Date', b'Sat, 05 Apr 2025 13:37:35 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-04-05 19:07:35,682 [INFO] HTTP Request: POST http://localhost:11434/api/show "HTTP/1.1 200 OK"
+2025-04-05 19:07:35,682 [DEBUG] receive_response_body.started request=<Request [b'POST']>
+2025-04-05 19:07:35,682 [DEBUG] receive_response_body.complete
+2025-04-05 19:07:35,683 [DEBUG] response_closed.started
+2025-04-05 19:07:35,683 [DEBUG] response_closed.complete
+2025-04-05 19:07:35,684 [DEBUG] model_info: {'key': 'llama3.2:latest', 'litellm_provider': 'ollama', 'mode': 'chat', 'supports_function_calling': True, 'input_cost_per_token': 0.0, 'output_cost_per_token': 0.0, 'max_tokens': 131072, 'max_input_tokens': 131072, 'max_output_tokens': 131072}
+2025-04-05 19:07:35,684 [DEBUG] Logging Details LiteLLM-Success Call streaming complete
+2025-04-05 19:07:35,684 [INFO] selected model name for cost calculation: ollama_chat/llama3.2:latest
+2025-04-05 19:07:35,684 [DEBUG] checking potential_model_names in litellm.model_cost: {'split_model': 'llama3.2:latest', 'combined_model_name': 'ollama_chat/llama3.2:latest', 'stripped_model_name': 'llama3.2:latest', 'combined_stripped_model_name': 'ollama_chat/llama3.2:latest', 'custom_llm_provider': 'ollama_chat'}
+2025-04-05 19:07:35,685 [DEBUG] send_request_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:35,685 [DEBUG] send_request_headers.complete
+2025-04-05 19:07:35,685 [DEBUG] send_request_body.started request=<Request [b'POST']>
+2025-04-05 19:07:35,685 [DEBUG] send_request_body.complete
+2025-04-05 19:07:35,686 [DEBUG] receive_response_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:35,708 [DEBUG] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=utf-8'), (b'Date', b'Sat, 05 Apr 2025 13:37:35 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-04-05 19:07:35,708 [INFO] HTTP Request: POST http://localhost:11434/api/show "HTTP/1.1 200 OK"
+2025-04-05 19:07:35,708 [DEBUG] receive_response_body.started request=<Request [b'POST']>
+2025-04-05 19:07:35,708 [DEBUG] receive_response_body.complete
+2025-04-05 19:07:35,708 [DEBUG] response_closed.started
+2025-04-05 19:07:35,708 [DEBUG] response_closed.complete
+2025-04-05 19:07:35,709 [DEBUG] Returned custom cost for model=ollama_chat/llama3.2:latest - prompt_tokens_cost_usd_dollar: 0, completion_tokens_cost_usd_dollar: 0
+2025-04-05 19:07:35,709 [DEBUG] response_cost: 0
+2025-04-05 19:07:35,709 [DEBUG] checking potential_model_names in litellm.model_cost: {'split_model': 'llama3.2:latest', 'combined_model_name': 'ollama_chat/llama3.2:latest', 'stripped_model_name': 'llama3.2:latest', 'combined_stripped_model_name': 'ollama_chat/llama3.2:latest', 'custom_llm_provider': 'ollama_chat'}
+2025-04-05 19:07:35,709 [DEBUG] send_request_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:35,710 [DEBUG] send_request_headers.complete
+2025-04-05 19:07:35,710 [DEBUG] send_request_body.started request=<Request [b'POST']>
+2025-04-05 19:07:35,710 [DEBUG] send_request_body.complete
+2025-04-05 19:07:35,710 [DEBUG] receive_response_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:35,731 [DEBUG] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=utf-8'), (b'Date', b'Sat, 05 Apr 2025 13:37:35 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-04-05 19:07:35,731 [INFO] HTTP Request: POST http://localhost:11434/api/show "HTTP/1.1 200 OK"
+2025-04-05 19:07:35,731 [DEBUG] receive_response_body.started request=<Request [b'POST']>
+2025-04-05 19:07:35,731 [DEBUG] receive_response_body.complete
+2025-04-05 19:07:35,731 [DEBUG] response_closed.started
+2025-04-05 19:07:35,731 [DEBUG] response_closed.complete
+2025-04-05 19:07:35,731 [DEBUG] model_info: {'key': 'llama3.2:latest', 'litellm_provider': 'ollama', 'mode': 'chat', 'supports_function_calling': True, 'input_cost_per_token': 0.0, 'output_cost_per_token': 0.0, 'max_tokens': 131072, 'max_input_tokens': 131072, 'max_output_tokens': 131072}
+2025-04-05 19:07:45,439 [INFO] [20250405190731] Setting 3 QA pairs
+2025-04-05 19:07:45,439 [INFO] [20250405190731] Q: What is your role in the crick..., A: no...
+2025-04-05 19:07:45,439 [INFO] [20250405190731] Q: Are you looking to start a new..., A: no...
+2025-04-05 19:07:45,439 [INFO] [20250405190731] Q: Do you have a specific budget ..., A: no...
+2025-04-05 19:07:45,439 [INFO] [20250405190731] QA pairs set, current step: qa_pairs_set
+2025-04-05 19:07:45,444 [INFO] [20250405190731] Generating research plan
+2025-04-05 19:07:45,444 [INFO] [20250405190731] Creating PrepareForResearch instance
+2025-04-05 19:07:45,445 [INFO] [20250405190731] Calling LLM to generate research plan with 3 QA pairs
+2025-04-05 19:07:45,447 [DEBUG] 
+
+2025-04-05 19:07:45,447 [DEBUG] [92mRequest to litellm:[0m
+2025-04-05 19:07:45,447 [DEBUG] [92mlitellm.completion(cache={'no-cache': False, 'no-store': False}, retry_policy=RetryPolicy(BadRequestErrorRetries=0, AuthenticationErrorRetries=0, TimeoutErrorRetries=8, RateLimitErrorRetries=8, ContentPolicyViolationErrorRetries=8, InternalServerErrorRetries=8), max_retries=0, model='ollama_chat/llama3.2:latest', messages=[{'role': 'system', 'content': 'Your input fields are:\n1. `user_intent` (str): The user\'s research query or topic they want to explore.\n        This is the main topic we\'ll be researching.\n2. `qa_pairs` (list[tuple[str, str]]): List of (question, answer) pairs from clarifying questions.\n        Use these to tailor the research plan to user\'s specific interests and needs.\n\nYour output fields are:\n1. `reasoning` (str)\n2. `research_plan` (list[str]): A list of 4-6 specific, actionable research steps. Each step should:\n        1. Be specific enough to generate targeted search queries\n        2. Focus on one aspect of the research\n        3. Include relevant context from QA pairs\n        4. Be phrased to yield good search results\n        5. Follow a logical progression\n        \n        Example format for each step:\n        "Research [specific aspect] of [topic] focusing on [context from QA]"\n        \n        The steps should cover:\n        - Core understanding\n        - Specific interests\n        - Current developments\n        - Expert perspectives\n        - Practical applications\n        - Historical context (if relevant)\n\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## user_intent ## ]]\n{user_intent}\n\n[[ ## qa_pairs ## ]]\n{qa_pairs}\n\n[[ ## reasoning ## ]]\n{reasoning}\n\n[[ ## research_plan ## ]]\n{research_plan}        # note: the value you produce must adhere to the JSON schema: {"type": "array", "items": {"type": "string"}}\n\n[[ ## completed ## ]]\n\nIn adhering to this structure, your objective is: \n        Generate a detailed, actionable research plan based on user intent and clarifying answers.\n        \n        Rules:\n        1. Each step should be specific and actionable\n        2. Steps should be ordered from broad to specific\n        3. Each step should be convertible to search queries\n        4. Include specific aspects mentioned in clarifying answers\n        5. Consider time periods, expertise levels, and preferences from QA pairs\n        6. Focus on gathering comprehensive information\n        7. Include steps for:\n           - Core topic understanding\n           - Specific aspects mentioned\n           - Current developments/trends\n           - Expert opinions/analysis\n           - Practical applications\n           - Historical context (if relevant)'}, {'role': 'user', 'content': '[[ ## user_intent ## ]]\nbusiness plan of cricket\n\n[[ ## qa_pairs ## ]]\n[["What is your role in the cricket industry, if any?", "no"], ["Are you looking to start a new business or expand an existing one?", "no"], ["Do you have a specific budget in mind for your venture?", "no"]]\n\nRespond with the corresponding output fields, starting with the field `[[ ## reasoning ## ]]`, then `[[ ## research_plan ## ]]` (must be formatted as a valid Python list[str]), and then ending with the marker for `[[ ## completed ## ]]`.'}], temperature=0.0, max_tokens=1000, api_base='http://localhost:11434')[0m
+2025-04-05 19:07:45,447 [DEBUG] 
+
+2025-04-05 19:07:45,447 [DEBUG] self.optional_params: {}
+2025-04-05 19:07:45,447 [DEBUG] SYNC kwargs[caching]: False; litellm.cache: <litellm.caching.caching.Cache object at 0x109200910>; kwargs.get('cache')['no-cache']: False
+2025-04-05 19:07:45,447 [DEBUG] INSIDE CHECKING SYNC CACHE
+2025-04-05 19:07:45,448 [DEBUG] 
+Created cache key: model: ollama_chat/llama3.2:latestmessages: [{'role': 'system', 'content': 'Your input fields are:\n1. `user_intent` (str): The user\'s research query or topic they want to explore.\n        This is the main topic we\'ll be researching.\n2. `qa_pairs` (list[tuple[str, str]]): List of (question, answer) pairs from clarifying questions.\n        Use these to tailor the research plan to user\'s specific interests and needs.\n\nYour output fields are:\n1. `reasoning` (str)\n2. `research_plan` (list[str]): A list of 4-6 specific, actionable research steps. Each step should:\n        1. Be specific enough to generate targeted search queries\n        2. Focus on one aspect of the research\n        3. Include relevant context from QA pairs\n        4. Be phrased to yield good search results\n        5. Follow a logical progression\n        \n        Example format for each step:\n        "Research [specific aspect] of [topic] focusing on [context from QA]"\n        \n        The steps should cover:\n        - Core understanding\n        - Specific interests\n        - Current developments\n        - Expert perspectives\n        - Practical applications\n        - Historical context (if relevant)\n\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## user_intent ## ]]\n{user_intent}\n\n[[ ## qa_pairs ## ]]\n{qa_pairs}\n\n[[ ## reasoning ## ]]\n{reasoning}\n\n[[ ## research_plan ## ]]\n{research_plan}        # note: the value you produce must adhere to the JSON schema: {"type": "array", "items": {"type": "string"}}\n\n[[ ## completed ## ]]\n\nIn adhering to this structure, your objective is: \n        Generate a detailed, actionable research plan based on user intent and clarifying answers.\n        \n        Rules:\n        1. Each step should be specific and actionable\n        2. Steps should be ordered from broad to specific\n        3. Each step should be convertible to search queries\n        4. Include specific aspects mentioned in clarifying answers\n        5. Consider time periods, expertise levels, and preferences from QA pairs\n        6. Focus on gathering comprehensive information\n        7. Include steps for:\n           - Core topic understanding\n           - Specific aspects mentioned\n           - Current developments/trends\n           - Expert opinions/analysis\n           - Practical applications\n           - Historical context (if relevant)'}, {'role': 'user', 'content': '[[ ## user_intent ## ]]\nbusiness plan of cricket\n\n[[ ## qa_pairs ## ]]\n[["What is your role in the cricket industry, if any?", "no"], ["Are you looking to start a new business or expand an existing one?", "no"], ["Do you have a specific budget in mind for your venture?", "no"]]\n\nRespond with the corresponding output fields, starting with the field `[[ ## reasoning ## ]]`, then `[[ ## research_plan ## ]]` (must be formatted as a valid Python list[str]), and then ending with the marker for `[[ ## completed ## ]]`.'}]temperature: 0.0max_tokens: 1000
+2025-04-05 19:07:45,448 [DEBUG] Hashed cache key (SHA-256): a3045aa968df0409d52df1dee6ea9e38e7a83ef596038caf919cbba057d07baa
+2025-04-05 19:07:45,448 [DEBUG] Final hashed key: a3045aa968df0409d52df1dee6ea9e38e7a83ef596038caf919cbba057d07baa
+2025-04-05 19:07:45,448 [INFO] 
+LiteLLM completion() model= llama3.2:latest; provider = ollama_chat
+2025-04-05 19:07:45,449 [DEBUG] 
+LiteLLM: Params passed to completion() {'model': 'llama3.2:latest', 'functions': None, 'function_call': None, 'temperature': 0.0, 'top_p': None, 'n': None, 'stream': None, 'stream_options': None, 'stop': None, 'max_tokens': 1000, 'max_completion_tokens': None, 'modalities': None, 'prediction': None, 'audio': None, 'presence_penalty': None, 'frequency_penalty': None, 'logit_bias': None, 'user': None, 'custom_llm_provider': 'ollama_chat', 'response_format': None, 'seed': None, 'tools': None, 'tool_choice': None, 'max_retries': 0, 'logprobs': None, 'top_logprobs': None, 'extra_headers': None, 'api_version': None, 'parallel_tool_calls': None, 'drop_params': None, 'reasoning_effort': None, 'additional_drop_params': None, 'messages': [{'role': 'system', 'content': 'Your input fields are:\n1. `user_intent` (str): The user\'s research query or topic they want to explore.\n        This is the main topic we\'ll be researching.\n2. `qa_pairs` (list[tuple[str, str]]): List of (question, answer) pairs from clarifying questions.\n        Use these to tailor the research plan to user\'s specific interests and needs.\n\nYour output fields are:\n1. `reasoning` (str)\n2. `research_plan` (list[str]): A list of 4-6 specific, actionable research steps. Each step should:\n        1. Be specific enough to generate targeted search queries\n        2. Focus on one aspect of the research\n        3. Include relevant context from QA pairs\n        4. Be phrased to yield good search results\n        5. Follow a logical progression\n        \n        Example format for each step:\n        "Research [specific aspect] of [topic] focusing on [context from QA]"\n        \n        The steps should cover:\n        - Core understanding\n        - Specific interests\n        - Current developments\n        - Expert perspectives\n        - Practical applications\n        - Historical context (if relevant)\n\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## user_intent ## ]]\n{user_intent}\n\n[[ ## qa_pairs ## ]]\n{qa_pairs}\n\n[[ ## reasoning ## ]]\n{reasoning}\n\n[[ ## research_plan ## ]]\n{research_plan}        # note: the value you produce must adhere to the JSON schema: {"type": "array", "items": {"type": "string"}}\n\n[[ ## completed ## ]]\n\nIn adhering to this structure, your objective is: \n        Generate a detailed, actionable research plan based on user intent and clarifying answers.\n        \n        Rules:\n        1. Each step should be specific and actionable\n        2. Steps should be ordered from broad to specific\n        3. Each step should be convertible to search queries\n        4. Include specific aspects mentioned in clarifying answers\n        5. Consider time periods, expertise levels, and preferences from QA pairs\n        6. Focus on gathering comprehensive information\n        7. Include steps for:\n           - Core topic understanding\n           - Specific aspects mentioned\n           - Current developments/trends\n           - Expert opinions/analysis\n           - Practical applications\n           - Historical context (if relevant)'}, {'role': 'user', 'content': '[[ ## user_intent ## ]]\nbusiness plan of cricket\n\n[[ ## qa_pairs ## ]]\n[["What is your role in the cricket industry, if any?", "no"], ["Are you looking to start a new business or expand an existing one?", "no"], ["Do you have a specific budget in mind for your venture?", "no"]]\n\nRespond with the corresponding output fields, starting with the field `[[ ## reasoning ## ]]`, then `[[ ## research_plan ## ]]` (must be formatted as a valid Python list[str]), and then ending with the marker for `[[ ## completed ## ]]`.'}], 'thinking': None}
+2025-04-05 19:07:45,449 [DEBUG] 
+LiteLLM: Non-Default params passed to completion() {'temperature': 0.0, 'max_tokens': 1000, 'max_retries': 0}
+2025-04-05 19:07:45,449 [DEBUG] Final returned optional params: {'temperature': 0.0, 'num_predict': 1000}
+2025-04-05 19:07:45,449 [DEBUG] self.optional_params: {'temperature': 0.0, 'num_predict': 1000}
+2025-04-05 19:07:45,449 [DEBUG] [92m
+
+POST Request Sent from LiteLLM:
+curl -X POST \
+http://localhost:11434/api/chat \
+-d '{'model': 'llama3.2:latest', 'messages': [{'role': 'system', 'content': 'Your input fields are:\n1. `user_intent` (str): The user\'s research query or topic they want to explore.\n        This is the main topic we\'ll be researching.\n2. `qa_pairs` (list[tuple[str, str]]): List of (question, answer) pairs from clarifying questions.\n        Use these to tailor the research plan to user\'s specific interests and needs.\n\nYour output fields are:\n1. `reasoning` (str)\n2. `research_plan` (list[str]): A list of 4-6 specific, actionable research steps. Each step should:\n        1. Be specific enough to generate targeted search queries\n        2. Focus on one aspect of the research\n        3. Include relevant context from QA pairs\n        4. Be phrased to yield good search results\n        5. Follow a logical progression\n        \n        Example format for each step:\n        "Research [specific aspect] of [topic] focusing on [context from QA]"\n        \n        The steps should cover:\n        - Core understanding\n        - Specific interests\n        - Current developments\n        - Expert perspectives\n        - Practical applications\n        - Historical context (if relevant)\n\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## user_intent ## ]]\n{user_intent}\n\n[[ ## qa_pairs ## ]]\n{qa_pairs}\n\n[[ ## reasoning ## ]]\n{reasoning}\n\n[[ ## research_plan ## ]]\n{research_plan}        # note: the value you produce must adhere to the JSON schema: {"type": "array", "items": {"type": "string"}}\n\n[[ ## completed ## ]]\n\nIn adhering to this structure, your objective is: \n        Generate a detailed, actionable research plan based on user intent and clarifying answers.\n        \n        Rules:\n        1. Each step should be specific and actionable\n        2. Steps should be ordered from broad to specific\n        3. Each step should be convertible to search queries\n        4. Include specific aspects mentioned in clarifying answers\n        5. Consider time periods, expertise levels, and preferences from QA pairs\n        6. Focus on gathering comprehensive information\n        7. Include steps for:\n           - Core topic understanding\n           - Specific aspects mentioned\n           - Current developments/trends\n           - Expert opinions/analysis\n           - Practical applications\n           - Historical context (if relevant)'}, {'role': 'user', 'content': '[[ ## user_intent ## ]]\nbusiness plan of cricket\n\n[[ ## qa_pairs ## ]]\n[["What is your role in the cricket industry, if any?", "no"], ["Are you looking to start a new business or expand an existing one?", "no"], ["Do you have a specific budget in mind for your venture?", "no"]]\n\nRespond with the corresponding output fields, starting with the field `[[ ## reasoning ## ]]`, then `[[ ## research_plan ## ]]` (must be formatted as a valid Python list[str]), and then ending with the marker for `[[ ## completed ## ]]`.'}], 'options': {'temperature': 0.0, 'num_predict': 1000}, 'stream': False}'
+[0m
+
+2025-04-05 19:07:45,450 [DEBUG] close.started
+2025-04-05 19:07:45,450 [DEBUG] close.complete
+2025-04-05 19:07:45,450 [DEBUG] close.started
+2025-04-05 19:07:45,450 [DEBUG] close.complete
+2025-04-05 19:07:45,450 [DEBUG] connect_tcp.started host='localhost' port=11434 local_address=None timeout=6000 socket_options=None
+2025-04-05 19:07:45,450 [DEBUG] connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x109caf390>
+2025-04-05 19:07:45,450 [DEBUG] send_request_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:45,450 [DEBUG] send_request_headers.complete
+2025-04-05 19:07:45,451 [DEBUG] send_request_body.started request=<Request [b'POST']>
+2025-04-05 19:07:45,451 [DEBUG] send_request_body.complete
+2025-04-05 19:07:45,451 [DEBUG] receive_response_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:50,070 [DEBUG] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=utf-8'), (b'Date', b'Sat, 05 Apr 2025 13:37:50 GMT'), (b'Content-Length', b'1373')])
+2025-04-05 19:07:50,070 [INFO] HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+2025-04-05 19:07:50,071 [DEBUG] receive_response_body.started request=<Request [b'POST']>
+2025-04-05 19:07:50,071 [DEBUG] receive_response_body.complete
+2025-04-05 19:07:50,071 [DEBUG] response_closed.started
+2025-04-05 19:07:50,071 [DEBUG] response_closed.complete
+2025-04-05 19:07:50,072 [DEBUG] RAW RESPONSE:
+{"model":"llama3.2:latest","created_at":"2025-04-05T13:37:50.069536Z","message":{"role":"assistant","content":"[[ ## reasoning ## ]]\nThe user intent is to create a business plan for a cricket-related venture, but does not have specific questions about their role in the industry or budget. This suggests that they are looking for general information on starting and running a successful cricket business.\n\n[[ ## research_plan ## ]]\n[\n  \"Research core concepts of entrepreneurship and small business management as they apply to the cricket industry\",\n  \"Investigate current trends and developments in the global cricket market, including recent changes in player contracts, sponsorship deals, and tournament formats\",\n  \"Analyze expert opinions on key factors for success in a cricket-related business, such as team management, marketing strategies, and financial planning\",\n  \"Explore successful business models in the cricket industry, including franchise-based leagues, sponsorships, and merchandise sales\",\n  \"Research historical context of cricket businesses, including notable successes and failures, to inform strategic decisions\"\n]\n\n[[ ## completed ## ]]"},"done_reason":"stop","done":true,"total_duration":4618402125,"load_duration":30683166,"prompt_eval_count":643,"prompt_eval_duration":921557542,"eval_count":186,"eval_duration":3664096500}
+
+
+2025-04-05 19:07:50,072 [DEBUG] token_counter messages received: [{'role': 'system', 'content': 'Your input fields are:\n1. `user_intent` (str): The user\'s research query or topic they want to explore.\n        This is the main topic we\'ll be researching.\n2. `qa_pairs` (list[tuple[str, str]]): List of (question, answer) pairs from clarifying questions.\n        Use these to tailor the research plan to user\'s specific interests and needs.\n\nYour output fields are:\n1. `reasoning` (str)\n2. `research_plan` (list[str]): A list of 4-6 specific, actionable research steps. Each step should:\n        1. Be specific enough to generate targeted search queries\n        2. Focus on one aspect of the research\n        3. Include relevant context from QA pairs\n        4. Be phrased to yield good search results\n        5. Follow a logical progression\n        \n        Example format for each step:\n        "Research [specific aspect] of [topic] focusing on [context from QA]"\n        \n        The steps should cover:\n        - Core understanding\n        - Specific interests\n        - Current developments\n        - Expert perspectives\n        - Practical applications\n        - Historical context (if relevant)\n\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## user_intent ## ]]\n{user_intent}\n\n[[ ## qa_pairs ## ]]\n{qa_pairs}\n\n[[ ## reasoning ## ]]\n{reasoning}\n\n[[ ## research_plan ## ]]\n{research_plan}        # note: the value you produce must adhere to the JSON schema: {"type": "array", "items": {"type": "string"}}\n\n[[ ## completed ## ]]\n\nIn adhering to this structure, your objective is: \n        Generate a detailed, actionable research plan based on user intent and clarifying answers.\n        \n        Rules:\n        1. Each step should be specific and actionable\n        2. Steps should be ordered from broad to specific\n        3. Each step should be convertible to search queries\n        4. Include specific aspects mentioned in clarifying answers\n        5. Consider time periods, expertise levels, and preferences from QA pairs\n        6. Focus on gathering comprehensive information\n        7. Include steps for:\n           - Core topic understanding\n           - Specific aspects mentioned\n           - Current developments/trends\n           - Expert opinions/analysis\n           - Practical applications\n           - Historical context (if relevant)'}, {'role': 'user', 'content': '[[ ## user_intent ## ]]\nbusiness plan of cricket\n\n[[ ## qa_pairs ## ]]\n[["What is your role in the cricket industry, if any?", "no"], ["Are you looking to start a new business or expand an existing one?", "no"], ["Do you have a specific budget in mind for your venture?", "no"]]\n\nRespond with the corresponding output fields, starting with the field `[[ ## reasoning ## ]]`, then `[[ ## research_plan ## ]]` (must be formatted as a valid Python list[str]), and then ending with the marker for `[[ ## completed ## ]]`.'}]
+2025-04-05 19:07:50,073 [DEBUG] Token Counter - using generic token counter, for model=
+2025-04-05 19:07:50,073 [DEBUG] LiteLLM: Utils - Counting tokens for OpenAI model=gpt-3.5-turbo
+2025-04-05 19:07:50,074 [DEBUG] Token Counter - using generic token counter, for model=
+2025-04-05 19:07:50,075 [DEBUG] LiteLLM: Utils - Counting tokens for OpenAI model=gpt-3.5-turbo
+2025-04-05 19:07:50,075 [DEBUG] 
+Created cache key: model: ollama_chat/llama3.2:latestmessages: [{'role': 'system', 'content': 'Your input fields are:\n1. `user_intent` (str): The user\'s research query or topic they want to explore.\n        This is the main topic we\'ll be researching.\n2. `qa_pairs` (list[tuple[str, str]]): List of (question, answer) pairs from clarifying questions.\n        Use these to tailor the research plan to user\'s specific interests and needs.\n\nYour output fields are:\n1. `reasoning` (str)\n2. `research_plan` (list[str]): A list of 4-6 specific, actionable research steps. Each step should:\n        1. Be specific enough to generate targeted search queries\n        2. Focus on one aspect of the research\n        3. Include relevant context from QA pairs\n        4. Be phrased to yield good search results\n        5. Follow a logical progression\n        \n        Example format for each step:\n        "Research [specific aspect] of [topic] focusing on [context from QA]"\n        \n        The steps should cover:\n        - Core understanding\n        - Specific interests\n        - Current developments\n        - Expert perspectives\n        - Practical applications\n        - Historical context (if relevant)\n\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## user_intent ## ]]\n{user_intent}\n\n[[ ## qa_pairs ## ]]\n{qa_pairs}\n\n[[ ## reasoning ## ]]\n{reasoning}\n\n[[ ## research_plan ## ]]\n{research_plan}        # note: the value you produce must adhere to the JSON schema: {"type": "array", "items": {"type": "string"}}\n\n[[ ## completed ## ]]\n\nIn adhering to this structure, your objective is: \n        Generate a detailed, actionable research plan based on user intent and clarifying answers.\n        \n        Rules:\n        1. Each step should be specific and actionable\n        2. Steps should be ordered from broad to specific\n        3. Each step should be convertible to search queries\n        4. Include specific aspects mentioned in clarifying answers\n        5. Consider time periods, expertise levels, and preferences from QA pairs\n        6. Focus on gathering comprehensive information\n        7. Include steps for:\n           - Core topic understanding\n           - Specific aspects mentioned\n           - Current developments/trends\n           - Expert opinions/analysis\n           - Practical applications\n           - Historical context (if relevant)'}, {'role': 'user', 'content': '[[ ## user_intent ## ]]\nbusiness plan of cricket\n\n[[ ## qa_pairs ## ]]\n[["What is your role in the cricket industry, if any?", "no"], ["Are you looking to start a new business or expand an existing one?", "no"], ["Do you have a specific budget in mind for your venture?", "no"]]\n\nRespond with the corresponding output fields, starting with the field `[[ ## reasoning ## ]]`, then `[[ ## research_plan ## ]]` (must be formatted as a valid Python list[str]), and then ending with the marker for `[[ ## completed ## ]]`.'}]temperature: 0.0max_tokens: 1000
+2025-04-05 19:07:50,077 [DEBUG] Hashed cache key (SHA-256): a3045aa968df0409d52df1dee6ea9e38e7a83ef596038caf919cbba057d07baa
+2025-04-05 19:07:50,077 [DEBUG] Final hashed key: a3045aa968df0409d52df1dee6ea9e38e7a83ef596038caf919cbba057d07baa
+2025-04-05 19:07:50,078 [INFO] Wrapper: Completed Call, calling success_handler
+2025-04-05 19:07:50,078 [INFO] selected model name for cost calculation: ollama_chat/llama3.2:latest
+2025-04-05 19:07:50,078 [DEBUG] Logging Details LiteLLM-Success Call: Cache_hit=None
+2025-04-05 19:07:50,079 [DEBUG] checking potential_model_names in litellm.model_cost: {'split_model': 'llama3.2:latest', 'combined_model_name': 'ollama_chat/llama3.2:latest', 'stripped_model_name': 'llama3.2:latest', 'combined_stripped_model_name': 'ollama_chat/llama3.2:latest', 'custom_llm_provider': 'ollama_chat'}
+2025-04-05 19:07:50,079 [INFO] selected model name for cost calculation: ollama_chat/llama3.2:latest
+2025-04-05 19:07:50,080 [DEBUG] send_request_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:50,080 [DEBUG] checking potential_model_names in litellm.model_cost: {'split_model': 'llama3.2:latest', 'combined_model_name': 'ollama_chat/llama3.2:latest', 'stripped_model_name': 'llama3.2:latest', 'combined_stripped_model_name': 'ollama_chat/llama3.2:latest', 'custom_llm_provider': 'ollama_chat'}
+2025-04-05 19:07:50,081 [DEBUG] connect_tcp.started host='localhost' port=11434 local_address=None timeout=6000 socket_options=None
+2025-04-05 19:07:50,081 [DEBUG] send_request_headers.complete
+2025-04-05 19:07:50,081 [DEBUG] send_request_body.started request=<Request [b'POST']>
+2025-04-05 19:07:50,081 [DEBUG] send_request_body.complete
+2025-04-05 19:07:50,081 [DEBUG] receive_response_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:50,082 [DEBUG] connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x109ca3d50>
+2025-04-05 19:07:50,082 [DEBUG] send_request_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:50,082 [DEBUG] send_request_headers.complete
+2025-04-05 19:07:50,082 [DEBUG] send_request_body.started request=<Request [b'POST']>
+2025-04-05 19:07:50,083 [DEBUG] send_request_body.complete
+2025-04-05 19:07:50,083 [DEBUG] receive_response_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:50,101 [DEBUG] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=utf-8'), (b'Date', b'Sat, 05 Apr 2025 13:37:50 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-04-05 19:07:50,101 [INFO] HTTP Request: POST http://localhost:11434/api/show "HTTP/1.1 200 OK"
+2025-04-05 19:07:50,102 [DEBUG] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=utf-8'), (b'Date', b'Sat, 05 Apr 2025 13:37:50 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-04-05 19:07:50,102 [DEBUG] receive_response_body.started request=<Request [b'POST']>
+2025-04-05 19:07:50,103 [INFO] HTTP Request: POST http://localhost:11434/api/show "HTTP/1.1 200 OK"
+2025-04-05 19:07:50,103 [DEBUG] receive_response_body.complete
+2025-04-05 19:07:50,103 [DEBUG] receive_response_body.started request=<Request [b'POST']>
+2025-04-05 19:07:50,103 [DEBUG] response_closed.started
+2025-04-05 19:07:50,104 [DEBUG] receive_response_body.complete
+2025-04-05 19:07:50,104 [DEBUG] response_closed.complete
+2025-04-05 19:07:50,104 [DEBUG] response_closed.started
+2025-04-05 19:07:50,105 [DEBUG] response_closed.complete
+2025-04-05 19:07:50,105 [DEBUG] Returned custom cost for model=ollama_chat/llama3.2:latest - prompt_tokens_cost_usd_dollar: 0, completion_tokens_cost_usd_dollar: 0
+2025-04-05 19:07:50,107 [DEBUG] Returned custom cost for model=ollama_chat/llama3.2:latest - prompt_tokens_cost_usd_dollar: 0, completion_tokens_cost_usd_dollar: 0
+2025-04-05 19:07:50,107 [DEBUG] response_cost: 0
+2025-04-05 19:07:50,107 [DEBUG] response_cost: 0
+2025-04-05 19:07:50,109 [INFO] [20250405190731] Generated research plan with 5 steps in 4.66s
+2025-04-05 19:07:50,109 [DEBUG] checking potential_model_names in litellm.model_cost: {'split_model': 'llama3.2:latest', 'combined_model_name': 'ollama_chat/llama3.2:latest', 'stripped_model_name': 'llama3.2:latest', 'combined_stripped_model_name': 'ollama_chat/llama3.2:latest', 'custom_llm_provider': 'ollama_chat'}
+2025-04-05 19:07:50,109 [INFO] [20250405190731] Step 1: Research core concepts of entrepreneurship and sma...
+2025-04-05 19:07:50,110 [DEBUG] send_request_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:50,110 [INFO] [20250405190731] Step 2: Investigate current trends and developments in the...
+2025-04-05 19:07:50,110 [DEBUG] send_request_headers.complete
+2025-04-05 19:07:50,110 [INFO] [20250405190731] Step 3: Analyze expert opinions on key factors for success...
+2025-04-05 19:07:50,110 [DEBUG] send_request_body.started request=<Request [b'POST']>
+2025-04-05 19:07:50,111 [INFO] [20250405190731] Step 4: Explore successful business models in the cricket ...
+2025-04-05 19:07:50,111 [INFO] [20250405190731] Step 5: Research historical context of cricket businesses,...
+2025-04-05 19:07:50,111 [DEBUG] send_request_body.complete
+2025-04-05 19:07:50,111 [DEBUG] receive_response_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:50,130 [DEBUG] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=utf-8'), (b'Date', b'Sat, 05 Apr 2025 13:37:50 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-04-05 19:07:50,131 [INFO] HTTP Request: POST http://localhost:11434/api/show "HTTP/1.1 200 OK"
+2025-04-05 19:07:50,131 [DEBUG] receive_response_body.started request=<Request [b'POST']>
+2025-04-05 19:07:50,131 [DEBUG] receive_response_body.complete
+2025-04-05 19:07:50,132 [DEBUG] response_closed.started
+2025-04-05 19:07:50,132 [DEBUG] response_closed.complete
+2025-04-05 19:07:50,132 [DEBUG] model_info: {'key': 'llama3.2:latest', 'litellm_provider': 'ollama', 'mode': 'chat', 'supports_function_calling': True, 'input_cost_per_token': 0.0, 'output_cost_per_token': 0.0, 'max_tokens': 131072, 'max_input_tokens': 131072, 'max_output_tokens': 131072}
+2025-04-05 19:07:50,133 [DEBUG] Logging Details LiteLLM-Success Call streaming complete
+2025-04-05 19:07:50,133 [INFO] selected model name for cost calculation: ollama_chat/llama3.2:latest
+2025-04-05 19:07:50,133 [DEBUG] checking potential_model_names in litellm.model_cost: {'split_model': 'llama3.2:latest', 'combined_model_name': 'ollama_chat/llama3.2:latest', 'stripped_model_name': 'llama3.2:latest', 'combined_stripped_model_name': 'ollama_chat/llama3.2:latest', 'custom_llm_provider': 'ollama_chat'}
+2025-04-05 19:07:50,133 [DEBUG] send_request_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:50,133 [DEBUG] send_request_headers.complete
+2025-04-05 19:07:50,134 [DEBUG] send_request_body.started request=<Request [b'POST']>
+2025-04-05 19:07:50,134 [DEBUG] send_request_body.complete
+2025-04-05 19:07:50,134 [DEBUG] receive_response_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:50,153 [DEBUG] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=utf-8'), (b'Date', b'Sat, 05 Apr 2025 13:37:50 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-04-05 19:07:50,153 [INFO] HTTP Request: POST http://localhost:11434/api/show "HTTP/1.1 200 OK"
+2025-04-05 19:07:50,153 [DEBUG] receive_response_body.started request=<Request [b'POST']>
+2025-04-05 19:07:50,153 [DEBUG] receive_response_body.complete
+2025-04-05 19:07:50,153 [DEBUG] response_closed.started
+2025-04-05 19:07:50,153 [DEBUG] response_closed.complete
+2025-04-05 19:07:50,154 [DEBUG] Returned custom cost for model=ollama_chat/llama3.2:latest - prompt_tokens_cost_usd_dollar: 0, completion_tokens_cost_usd_dollar: 0
+2025-04-05 19:07:50,154 [DEBUG] response_cost: 0
+2025-04-05 19:07:50,154 [DEBUG] checking potential_model_names in litellm.model_cost: {'split_model': 'llama3.2:latest', 'combined_model_name': 'ollama_chat/llama3.2:latest', 'stripped_model_name': 'llama3.2:latest', 'combined_stripped_model_name': 'ollama_chat/llama3.2:latest', 'custom_llm_provider': 'ollama_chat'}
+2025-04-05 19:07:50,155 [DEBUG] send_request_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:50,155 [DEBUG] send_request_headers.complete
+2025-04-05 19:07:50,155 [DEBUG] send_request_body.started request=<Request [b'POST']>
+2025-04-05 19:07:50,155 [DEBUG] send_request_body.complete
+2025-04-05 19:07:50,155 [DEBUG] receive_response_headers.started request=<Request [b'POST']>
+2025-04-05 19:07:50,175 [DEBUG] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=utf-8'), (b'Date', b'Sat, 05 Apr 2025 13:37:50 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-04-05 19:07:50,175 [INFO] HTTP Request: POST http://localhost:11434/api/show "HTTP/1.1 200 OK"
+2025-04-05 19:07:50,175 [DEBUG] receive_response_body.started request=<Request [b'POST']>
+2025-04-05 19:07:50,176 [DEBUG] receive_response_body.complete
+2025-04-05 19:07:50,176 [DEBUG] response_closed.started
+2025-04-05 19:07:50,176 [DEBUG] response_closed.complete
+2025-04-05 19:07:50,176 [DEBUG] model_info: {'key': 'llama3.2:latest', 'litellm_provider': 'ollama', 'mode': 'chat', 'supports_function_calling': True, 'input_cost_per_token': 0.0, 'output_cost_per_token': 0.0, 'max_tokens': 131072, 'max_input_tokens': 131072, 'max_output_tokens': 131072}
+2025-04-05 19:12:49,556 [INFO] [20250405191249] New research session created
+2025-04-05 19:12:49,556 [INFO] [20250405191249] Getting available models
+2025-04-05 19:12:49,557 [DEBUG] connect_tcp.started host='127.0.0.1' port=11434 local_address=None timeout=None socket_options=None
+2025-04-05 19:12:49,557 [DEBUG] connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x107405e10>
+2025-04-05 19:12:49,557 [DEBUG] send_request_headers.started request=<Request [b'GET']>
+2025-04-05 19:12:49,558 [DEBUG] send_request_headers.complete
+2025-04-05 19:12:49,558 [DEBUG] send_request_body.started request=<Request [b'GET']>
+2025-04-05 19:12:49,558 [DEBUG] send_request_body.complete
+2025-04-05 19:12:49,558 [DEBUG] receive_response_headers.started request=<Request [b'GET']>
+2025-04-05 19:12:49,560 [DEBUG] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=utf-8'), (b'Date', b'Sat, 05 Apr 2025 13:42:49 GMT'), (b'Content-Length', b'684')])
+2025-04-05 19:12:49,560 [INFO] HTTP Request: GET http://127.0.0.1:11434/api/tags "HTTP/1.1 200 OK"
+2025-04-05 19:12:49,560 [DEBUG] receive_response_body.started request=<Request [b'GET']>
+2025-04-05 19:12:49,560 [DEBUG] receive_response_body.complete
+2025-04-05 19:12:49,560 [DEBUG] response_closed.started
+2025-04-05 19:12:49,560 [DEBUG] response_closed.complete
+2025-04-05 19:12:49,560 [INFO] [20250405191249] Found 2 models in 0.00s
+2025-04-05 19:12:49,564 [INFO] [20250405191249] New research session created
+2025-04-05 19:12:49,564 [INFO] [20250405191249] Getting available models
+2025-04-05 19:12:49,565 [DEBUG] send_request_headers.started request=<Request [b'GET']>
+2025-04-05 19:12:49,565 [DEBUG] send_request_headers.complete
+2025-04-05 19:12:49,565 [DEBUG] send_request_body.started request=<Request [b'GET']>
+2025-04-05 19:12:49,565 [DEBUG] send_request_body.complete
+2025-04-05 19:12:49,565 [DEBUG] receive_response_headers.started request=<Request [b'GET']>
+2025-04-05 19:12:49,566 [DEBUG] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=utf-8'), (b'Date', b'Sat, 05 Apr 2025 13:42:49 GMT'), (b'Content-Length', b'684')])
+2025-04-05 19:12:49,566 [INFO] HTTP Request: GET http://127.0.0.1:11434/api/tags "HTTP/1.1 200 OK"
+2025-04-05 19:12:49,566 [DEBUG] receive_response_body.started request=<Request [b'GET']>
+2025-04-05 19:12:49,566 [DEBUG] receive_response_body.complete
+2025-04-05 19:12:49,566 [DEBUG] response_closed.started
+2025-04-05 19:12:49,566 [DEBUG] response_closed.complete
+2025-04-05 19:12:49,566 [INFO] [20250405191249] Found 2 models in 0.00s
+2025-04-05 19:12:56,660 [INFO] [20250405191256] New research session created
+2025-04-05 19:12:56,661 [INFO] [20250405191256] Configuring model: llama3.2:latest
+2025-04-05 19:12:56,661 [ERROR] [20250405191256] Error configuring model: cannot import name 'BootstrappedPredictor' from 'dspy.predict' (/Users/sukeesh/.pyenv/versions/kenkyu/lib/python3.11/site-packages/dspy/predict/__init__.py)
+2025-04-05 19:12:56,661 [ERROR] [20250405191256] Traceback (most recent call last):
+  File "/Users/sukeesh/workspace/sukeesh/noviq/noviq/backend/research.py", line 67, in configure_model
+    from dspy.predict import BootstrappedPredictor
+ImportError: cannot import name 'BootstrappedPredictor' from 'dspy.predict' (/Users/sukeesh/.pyenv/versions/kenkyu/lib/python3.11/site-packages/dspy/predict/__init__.py)
+
+2025-04-05 19:13:07,871 [INFO] [20250405191307] New research session created
+2025-04-05 19:13:07,871 [INFO] [20250405191307] Getting available models
+2025-04-05 19:13:07,871 [DEBUG] connect_tcp.started host='127.0.0.1' port=11434 local_address=None timeout=None socket_options=None
+2025-04-05 19:13:07,871 [DEBUG] connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x10a10e750>
+2025-04-05 19:13:07,871 [DEBUG] send_request_headers.started request=<Request [b'GET']>
+2025-04-05 19:13:07,871 [DEBUG] send_request_headers.complete
+2025-04-05 19:13:07,871 [DEBUG] send_request_body.started request=<Request [b'GET']>
+2025-04-05 19:13:07,871 [DEBUG] send_request_body.complete
+2025-04-05 19:13:07,871 [DEBUG] receive_response_headers.started request=<Request [b'GET']>
+2025-04-05 19:13:07,874 [DEBUG] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=utf-8'), (b'Date', b'Sat, 05 Apr 2025 13:43:07 GMT'), (b'Content-Length', b'684')])
+2025-04-05 19:13:07,874 [INFO] HTTP Request: GET http://127.0.0.1:11434/api/tags "HTTP/1.1 200 OK"
+2025-04-05 19:13:07,874 [DEBUG] receive_response_body.started request=<Request [b'GET']>
+2025-04-05 19:13:07,874 [DEBUG] receive_response_body.complete
+2025-04-05 19:13:07,874 [DEBUG] response_closed.started
+2025-04-05 19:13:07,874 [DEBUG] response_closed.complete
+2025-04-05 19:13:07,874 [INFO] [20250405191307] Found 2 models in 0.00s
+2025-04-05 19:13:07,878 [INFO] [20250405191307] New research session created
+2025-04-05 19:13:07,878 [INFO] [20250405191307] Getting available models
+2025-04-05 19:13:07,879 [DEBUG] send_request_headers.started request=<Request [b'GET']>
+2025-04-05 19:13:07,879 [DEBUG] send_request_headers.complete
+2025-04-05 19:13:07,879 [DEBUG] send_request_body.started request=<Request [b'GET']>
+2025-04-05 19:13:07,879 [DEBUG] send_request_body.complete
+2025-04-05 19:13:07,879 [DEBUG] receive_response_headers.started request=<Request [b'GET']>
+2025-04-05 19:13:07,880 [DEBUG] receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=utf-8'), (b'Date', b'Sat, 05 Apr 2025 13:43:07 GMT'), (b'Content-Length', b'684')])
+2025-04-05 19:13:07,880 [INFO] HTTP Request: GET http://127.0.0.1:11434/api/tags "HTTP/1.1 200 OK"
+2025-04-05 19:13:07,880 [DEBUG] receive_response_body.started request=<Request [b'GET']>
+2025-04-05 19:13:07,881 [DEBUG] receive_response_body.complete
+2025-04-05 19:13:07,881 [DEBUG] response_closed.started
+2025-04-05 19:13:07,881 [DEBUG] response_closed.complete
+2025-04-05 19:13:07,881 [INFO] [20250405191307] Found 2 models in 0.00s
+2025-04-05 19:13:15,433 [INFO] [20250405191315] New research session created
+2025-04-05 19:13:15,434 [INFO] [20250405191315] Configuring model: llama3.2:latest
+2025-04-05 19:13:15,434 [ERROR] [20250405191315] Error configuring model: cannot import name 'BootstrappedPredictor' from 'dspy.predict' (/Users/sukeesh/.pyenv/versions/kenkyu/lib/python3.11/site-packages/dspy/predict/__init__.py)
+2025-04-05 19:13:15,435 [ERROR] [20250405191315] Traceback (most recent call last):
+  File "/Users/sukeesh/workspace/sukeesh/noviq/noviq/backend/research.py", line 67, in configure_model
+    from dspy.predict import BootstrappedPredictor
+ImportError: cannot import name 'BootstrappedPredictor' from 'dspy.predict' (/Users/sukeesh/.pyenv/versions/kenkyu/lib/python3.11/site-packages/dspy/predict/__init__.py)
+
