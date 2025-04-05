@@ -47,7 +47,7 @@ questions = clarifying_question(user_intent=user_intent)
 
 qa_pairs = []
 
-print("Clarifying Questions:")
+print("\nClarifying Questions:")
 for question in questions.clarifying_questions:
     answer = input(question + "  ")
     qa_pairs.append((question, answer))
@@ -55,13 +55,13 @@ for question in questions.clarifying_questions:
 plan = research_plan(user_intent=user_intent, qa_pairs=qa_pairs)
 sources = []
 
-print("Research Plan:")
+print("\nResearch Plan:")
 for step in plan.research_plan:
     web_search_queries = generate_web_search_queries(user_intent=user_intent, qa_pairs=qa_pairs, overall_research_plan=plan.research_plan, research_plan_step=step)
     print("Generating web search queries for: " + step + "\n")
     print(web_search_queries.web_search_queries)
 
-    queries = web_search_queries.web_search_queries  # Take only first query
+    queries = web_search_queries.web_search_queries
 
     scraped_webpage_texts = []
 
@@ -142,4 +142,4 @@ file_name = "report.html"
 with open(file_name, "w") as f:
     f.write(research_report_text)
 
-print(f"Research report saved to {file_name}")
+print(f"\nResearch report saved to {file_name}")
