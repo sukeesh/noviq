@@ -2,42 +2,43 @@ import dspy
 
 
 class GenerateClarifyingQuestions(dspy.Signature):
-    """Generate clarifying questions to better understand the user's research context and preferences.
+    """Generate clarifying questions to understand the user's personal context and preferences for the research.
     
     Rules:
-    1. Focus on gathering context about user's preferences, constraints, and specific interests
-    2. Do NOT ask the user to explain their research topic - that's what we're here to research
-    3. Questions should help narrow down the scope and focus of the research
-    4. Each question should be specific and focused on one aspect
-    5. Questions should be easy to answer with a short response
-    6. Avoid yes/no questions unless absolutely necessary
-    7. Questions should help understand:
-       - Time period of interest
-       - Specific aspects or angles they're interested in
-       - Any constraints or preferences
-       - Their level of expertise in the topic
-       - Any specific sources they trust
+    1. Focus ONLY on the user's PERSONAL context - their goals, preferences, and background
+    2. NEVER ask the user to provide technical information about the research topic
+    3. Questions should help understand the USER, not the topic
+    4. Ask about the user's needs, constraints, preferences, and experience level
+    5. Assume the user is asking YOU to research the topic - don't ask them to explain it
+    6. Questions should be easy for anyone to answer about THEMSELVES
+    
+    CRITICAL: Do NOT ask questions that require domain expertise or technical knowledge about the topic!
     """
 
     user_intent: str = dspy.InputField(
-        description="""The user's research query or topic they want to explore.
-        This is the main topic we'll be researching, so don't ask them to explain it."""
+        description="""The user's research request. Your job is to understand their personal context, 
+        not to have them explain the topic to you."""
     )
     
     clarifying_questions: list[str] = dspy.OutputField(
-        description="""A list of 2-3 focused clarifying questions that will help:
-        1. Understand the user's specific interests within the topic
-        2. Identify any constraints or preferences
-        3. Determine the appropriate depth and scope of research
-        4. Gather context about their expertise level
-        5. Learn about trusted sources or perspectives
+        description="""A list of 2-3 questions focused ONLY on understanding the user's personal context.
         
-        Each question should:
-        - Be specific and focused
-        - Be easy to answer briefly
-        - Help narrow down the research scope
-        - NOT ask them to explain their topic
-        - NOT be a yes/no question unless necessary"""
+        GOOD questions (about the USER, not the topic):
+        - "What is your background or experience level with this subject?"
+        - "What is your main goal or purpose for researching this topic?"
+        - "Do you need a general overview or specific details on certain aspects?"
+        - "What format or level of detail would be most helpful for you?"
+        - "Is there a specific time period or geographic focus that interests you?"
+        - "Are there any particular perspectives or viewpoints you want included?"
+        
+        BAD questions (asking for topic expertise - NEVER ASK THESE):
+        - "What are the technical aspects of X that drive Y?"
+        - "How does X impact Y in the industry?"
+        - "What are the specific issues with X?"
+        
+        Each question must be about the USER's context, preferences, or constraints - NEVER about technical aspects of the topic itself.
+        The user is coming to YOU for research - don't ask them to do the research!
+        """
     )
 
 
@@ -186,4 +187,9 @@ class GenerateFinalResearchReport(dspy.Signature):
     user_intent: str = dspy.InputField(description="The user's research topic to address.")
     qa_pairs: list[tuple[str, str]] = dspy.InputField(description="Question-answer pairs to tailor the report content.")
     cleaned_webpage_text: list[str] = dspy.InputField(description="Cleaned webpage content to use as source material.")
-    research_report: str = dspy.OutputField(description="Complete HTML document with proper structure, semantic tags, and styling. Include all relevant information organized logically.")
+    research_report: str = dspy.OutputField(
+        description="""Complete HTML document with proper structure, semantic tags, and styling. 
+        The report should be very well detailed and should be very well organized. 
+        Include all relevant information organized logically.
+        """
+    )

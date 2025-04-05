@@ -61,7 +61,7 @@ for step in plan.research_plan:
     print("Generating web search queries for: " + step + "\n")
     print(web_search_queries.web_search_queries)
 
-    queries = web_search_queries.web_search_queries[:1]  # Take only first query
+    queries = web_search_queries.web_search_queries
 
     scraped_webpage_texts = []
 
@@ -87,6 +87,7 @@ for step in plan.research_plan:
 
             print("Category: ", category)
             print("Cleaned Text: ", cleaned_text)
+
 
 research_report = generate_final_research_report(
     user_intent=user_intent, 
