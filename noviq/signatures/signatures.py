@@ -98,7 +98,7 @@ class GenerateWebSearchQueries(dspy.Signature):
     """Generate focused, concrete web search queries based on the research plan step.
     
     Rules:
-    1. Generate 4-5 highly targeted queries per research step
+    1. Generate 5 highly targeted queries per research step
     2. Include specific details from user intent and QA pairs
     3. Focus on recent and relevant information
     4. Use proper search operators (+, quotes) for precision
@@ -126,7 +126,7 @@ class GenerateWebSearchQueries(dspy.Signature):
     )
     
     web_search_queries: list[str] = dspy.OutputField(
-        description="""A list of 4-5 focused, concrete web search queries. Each query should:
+        description="""A list of 5 focused, concrete web search queries. Each query should:
         1. Include relevant details from user intent and QA pairs
         2. Use proper search operators (+, quotes) for precision
         3. Focus on recent information (last 1-2 years)
@@ -182,7 +182,7 @@ class CleanAndClassifyWebpageText(dspy.Signature):
 
 
 class GenerateFinalResearchReport(dspy.Signature):
-    """Generate a comprehensive research report in HTML format based on collected information."""
+    """Generate a comprehensive research report in HTML format based on collected information. Output is strictly in HTML Format."""
 
     user_intent: str = dspy.InputField(description="The user's research topic to address.")
     qa_pairs: list[tuple[str, str]] = dspy.InputField(description="Question-answer pairs to tailor the report content.")
@@ -190,6 +190,6 @@ class GenerateFinalResearchReport(dspy.Signature):
     research_report: str = dspy.OutputField(
         description="""Complete HTML document with proper structure, semantic tags, and styling. 
         The report should be very well detailed and should be very well organized. 
-        Include all relevant information organized logically.
+        Include all relevant information organized logically. All the details should be STRICTLY in the HTML format.
         """
     )
