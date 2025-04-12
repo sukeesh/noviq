@@ -162,7 +162,7 @@ class CleanAndClassifyWebpageText(dspy.Signature):
     )
     
     webpage_text: str = dspy.InputField(
-        description="Raw webpage text that needs cleaning. Contains the main content mixed with navigation, ads, and website elements."
+        description="This is raw webpage text. Contains the webpage content mixed with navigation, ads, and website elements. All the webpage content from this needs to be extracted as is."
     )
     
     cleaned_webpage_text: str = dspy.OutputField(
@@ -175,10 +175,6 @@ class CleanAndClassifyWebpageText(dspy.Signature):
         - Include any relevant dates, numbers, statistics
         Do not add any commentary or analysis."""
     )
-    
-    category: str = dspy.OutputField(
-        description="""A single specific category that best describes the content."""
-    )
 
 
 class GenerateFinalResearchReport(dspy.Signature):
@@ -186,10 +182,70 @@ class GenerateFinalResearchReport(dspy.Signature):
 
     user_intent: str = dspy.InputField(description="The user's research topic to address.")
     qa_pairs: list[tuple[str, str]] = dspy.InputField(description="Question-answer pairs to tailor the report content.")
-    cleaned_webpage_text: list[str] = dspy.InputField(description="Cleaned webpage content to use as source material.")
+    cleaned_webpage_text: list[str] = dspy.InputField(description="Cleaned webpage text to use as source material.")
+    webpage_summaries: list[str] = dspy.InputField(description="7-sentence summaries of each webpage to use as source material.")
     research_report: str = dspy.OutputField(
         description="""Complete HTML document with proper structure, semantic tags, and styling. 
-        The report should be very well detailed and should be very well organized. 
-        Include all relevant information organized logically. All the details should be STRICTLY in the HTML format.
+        The report MUST start with <!DOCTYPE html> and include proper <html>, <head>, and <body> tags.
+        
+        The report should be extremely detailed (at least 100 sentences) and very well organized. 
+        Include all relevant information organized logically with proper HTML headings (<h1>, <h2>, etc.).
+        
+        CRITICAL REQUIREMENTS:
+        1. Output MUST be valid HTML - start with <!DOCTYPE html> and include all necessary HTML tags
+        2. Maintain STRICT factual accuracy - only include facts directly from the source material
+        3. Do NOT fabricate information - if unsure, exclude rather than inventing facts
+        4. Create a proper information hierarchy using semantic HTML (<section>, <article>, etc.)
+        5. Include a detailed table of contents with anchor links to each section
+        6. Write at least 100 sentences of detailed content covering all aspects thoroughly
+        7. Use proper formatting with paragraphs, lists, tables where appropriate
+        8. Ensure comprehensive coverage of all topics found in the source material
+        
+        The HTML should be properly structured with:
+        - A styled header and title
+        - A table of contents with anchor links
+        - Multiple sections with proper headings
+        - Detailed paragraphs under each section
+        - Lists for enumerating points
+        - Proper conclusion section
+        
+        AVOID at all costs:
+        - Making up facts not present in source material
+        - Producing incomplete or non-HTML output
+        - Creating overly simplistic reports lacking detail
+        """
+    )
+
+
+class GenerateWebpageSummary(dspy.Signature):
+    """Generate a concise 7-sentence summary of webpage content that captures the key information."""
+    
+    user_intent: str = dspy.InputField(
+        description="The user's research intent to help focus the summary on relevant content."
+    )
+    
+    webpage_text: str = dspy.InputField(
+        description="The cleaned webpage text content to summarize."
+    )
+    
+    webpage_title: str = dspy.InputField(
+        description="The title of the webpage being summarized."
+    )
+    
+    webpage_url: str = dspy.InputField(
+        description="The URL of the webpage being summarized."
+    )
+    
+    summary: str = dspy.OutputField(
+        description="""A concise but comprehensive 7-sentence summary of the webpage content that:
+        1. Captures the main topic and purpose of the page
+        2. Includes the most important facts and information
+        3. Preserves key statistics, dates, and figures
+        4. Represents any important conclusions or findings
+        5. Maintains factual accuracy without adding commentary
+        6. Is relevant to the user's research intent
+        7. Includes enough specific details to be useful for deep research
+        
+        The summary must be EXACTLY 7 sentences - no more, no less.
         """
     )

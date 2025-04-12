@@ -3,6 +3,8 @@ import requests
 from bs4 import BeautifulSoup
 import webbrowser
 import time
+import os
+import json
 
 
 class Scrape(ABC):
@@ -50,3 +52,68 @@ class BeautifulSoupScrape(Scrape):
         except Exception as e:
             print(f"Error scraping webpage {self.url}: {e}")
             return f"Skipped due to error: {e}"
+
+
+class GoogleSearchScrape:
+    def __init__(self, api_key=None, cx=None):
+        """
+        Initialize Google Custom Search API client
+        
+        Args:
+            api_key (str): Google API key
+            cx (str): Google Custom Search Engine ID
+        """
+        self.api_key = api_key or os.environ.get('GOOGLE_API_KEY')
+        self.cx = cx or os.environ.get('GOOGLE_CSE_ID')
+        
+        if not self.api_key:
+            raise ValueError("Google API key is required. Set GOOGLE_API_KEY environment variable or pass api_key.")
+        if not self.cx:
+            raise ValueError("Google Custom Search Engine ID is required. Set GOOGLE_CSE_ID environment variable or pass cx.")
+    
+    def search(self, query, num_results=10):
+        """
+        Perform a Google search and return results
+        
+        Args:
+            query (str): Search query
+            num_results (int): Number of results to return (max 10 per request)
+            
+        Returns:
+            list: List of tuples containing (title, url)
+        """
+        base_url = "https://www.googleapis.com/customsearch/v1"
+        params = {
+            'key': self.api_key,
+            'cx': self.cx,
+            'q': query,
+            'num': min(num_results, 10)  # API limits to 10 per request
+        }
+        
+        try:
+            response = requests.get(base_url, params=params)
+            response.raise_for_status()
+            
+            search_results = []
+            data = response.json()
+            
+            if 'items' in data:
+                for item in data['items']:
+                    title = item.get('title', '')
+                    url = item.get('link', '')
+                    search_results.append((title, url))
+            
+            return search_results
+        except Exception as e:
+            print(f"Error performing Google search: {e}")
+            return []
+
+
+def get_search_engine():
+    """
+    Returns the appropriate search engine based on environment variables
+    
+    Returns:
+        str: 'google' or 'duckduckgo'
+    """
+    return os.environ.get('SEARCH_ENGINE', 'duckduckgo').lower()

@@ -3,12 +3,40 @@ from bs4 import BeautifulSoup
 from urllib.parse import quote
 import webbrowser
 import time
-
+from noviq.scrape.scrape import GoogleSearchScrape, get_search_engine
 
 
 def get_search_queries(search_query) -> list[tuple[str, str]]:
     """
-    Get search results for a query using DuckDuckGo
+    Get search results for a query using either DuckDuckGo or Google based on SEARCH_ENGINE env var
+    Returns a list of (title, URL) tuples
+    """
+    search_engine = get_search_engine()
+    
+    if search_engine == 'google':
+        return get_google_search_results(search_query)
+    else:
+        return get_duckduckgo_search_results(search_query)
+
+
+def get_google_search_results(search_query, num_results=5) -> list[tuple[str, str]]:
+    """
+    Get search results using Google Custom Search API
+    Returns a list of (title, URL) tuples
+    """
+    try:
+        google_search = GoogleSearchScrape()
+        results = google_search.search(search_query, num_results=num_results)
+        return results
+    except Exception as e:
+        print(f"Error with Google search: {e}")
+        print("Falling back to DuckDuckGo...")
+        return get_duckduckgo_search_results(search_query)
+
+
+def get_duckduckgo_search_results(search_query) -> list[tuple[str, str]]:
+    """
+    Get search results using DuckDuckGo
     Returns a list of (title, URL) tuples
     """
     # DuckDuckGo HTML search
